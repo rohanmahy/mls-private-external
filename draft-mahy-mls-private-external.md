@@ -9,8 +9,8 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: WG Working Group
+area: "Security"
+workgroup: "Messaging Layer Security"
 keyword:
  - private external proposal
  - private external commit
@@ -23,12 +23,12 @@ keyword:
  - GroupContext privacy
  - ratchet tree privacy
 venue:
-  group: WG
-  type: Working Group
-  mail: WG@example.com
-  arch: https://example.com/WG
-  github: USER/REPO
-  latest: https://example.com/LATEST
+  group: "Messaging Layer Security"
+  type: "Working Group"
+  mail: "mls@ietf.org"
+  arch: "https://mailarchive.ietf.org/arch/browse/mls/"
+  github: "rohanmahy/mls-secret-external"
+  latest: "https://rohanmahy.github.io/mls-secret-external/draft-mahy-mls-private-external.html"
 
 author:
  -
