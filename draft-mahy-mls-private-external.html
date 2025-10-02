@@ -7,7 +7,7 @@
 <title>Private External Message extensions for Messaging Layer Security (MLS)</title>
 <meta content="Rohan Mahy" name="author">
 <meta content="
-       TODO Abstract 
+       MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming, by encrypting external proposals using the public key of the root of the MLS ratchet key. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary. 
     " name="description">
 <meta content="xml2rfc 3.30.2" name="generator">
 <meta content="private external proposal" name="keyword">
@@ -1088,7 +1088,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Private External Message extensions for Messaging Layer Security (MLS)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">TODO Abstract<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming, by encrypting external proposals using the public key of the root of the MLS ratchet key. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1161,19 +1161,41 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-mechanism" class="internal xref">Mechanism</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-additional-information-shar" class="internal xref">Additional information shared in every commit</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-sending-an-external-proposa" class="internal xref">Sending an external proposal or external commit to the group</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-decryption-and-verification" class="internal xref">Decryption and verification by members</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
-            <p id="section-toc.1-1.6.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
-            <p id="section-toc.1-1.7.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
 </li>
         </ul>
 </nav>
@@ -1184,7 +1206,15 @@ svg :is([fill="white"], [fill^="#fff"]) {
       <h2 id="name-introduction">
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
-<p id="section-1-1">TODO Introduction<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-1">The MLS protocol <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>]</span> was designed to support both a model where the Distribution Service (DS) sees the contents of MLS handshake messages and often assumes a policy enforcement role, and a model where the DS is merely responsible for forwarding handshake messages and possibly enforcing ordering of messages.
+In the first model clients send every handshake as a PublicMessage (or a SemiPrivateMessage <span>[<a href="#I-D.mahy-mls-semiprivatemessage" class="cite xref">I-D.mahy-mls-semiprivatemessage</a>]</span>), whereas in the second model the clients send in-group handshakes as a PrivateMessage.
+As of this writing there are non-trivial commercial deployments using both the PublicMessage model (ex: Cisco, Amazon, Ring Central, Wire) and the PrivateMessage model (ex: Ephemera, Germ).<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">In the PrivateMessage model, group members enjoy substantially more privacy from the DS.
+In the PublicMessage model, the DS usually can provide (authorized) non-members with enough information that they can join a group via an external commit.
+Even in the PublicMessage model, some (usually large) groups use external proposals to join.
+In the PrivateMessage model, (authorized) non-members can also join using external proposals (or rarely using external commits if the GroupInfo is shared by an existing member), however the joiner is currently forced to send the proposal (or commit) as a PublicMessage and therefore reveal potentially private information such as their credential and capabilities to the DS.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">This extension allows groups using PrivateMessage to maintain the privacy of external handshake messages, by encrypting them to the (public) <code>encryption_key</code> of the root node of the ratchet tree.
+It also provides a way to convey that public key safely to prevent active attacks.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1198,37 +1228,196 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="security-considerations">
+<div id="mechanism">
 <section id="section-3">
-      <h2 id="name-security-considerations">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      <h2 id="name-mechanism">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-mechanism" class="section-name selfRef">Mechanism</a>
       </h2>
-<p id="section-3-1">TODO Security<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="additional-information-shared-in-every-commit">
+<section id="section-3.1">
+        <h3 id="name-additional-information-shar">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-additional-information-shar" class="section-name selfRef">Additional information shared in every commit</a>
+        </h3>
+<p id="section-3.1-1">Groups participating in this mechanism include a <code>root_private_signature_key</code> component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.6" class="relref">Section 4.6</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) in the GroupContext of type <code>RootPrivateSignature</code>, containing a unique random private signature key corresponding to the group's cipher suite.
+Whenever a commit removes a member from a group, this component <span class="bcp14">MUST</span> be replaced with a new unique random private signature key.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">Members sending a commit include one additional Additional Authentication Data (AAD) component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.9" class="relref">Section 4.9</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) of type <code>ExternalEncryptionInfo</code> in every commit (including commits sent in a <code>PrivateExternalMessage</code>).<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3.1-3.1">
+            <p id="section-3.1-3.1.1">Note: SafeSignWithLabel is not used, because there are two different component IDs represented.<a href="#section-3.1-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div class="lang-tls sourcecode" id="section-3.1-4">
+<pre>
+struct {
+    opaque root_private_signature_key&lt;V&gt;;
+} RootPrivateSignature;
+
+struct {
+    ProtocolVersion version = mls10;
+    opaque group_id&lt;V&gt;;
+    uint64 epoch;
+    CipherSuite ciphersuite;
+    HPKEPublicKey root_public_hpke_key;
+    SignaturePublicKey root_public_signature_key;
+} ExternalEncryptionInfoTBS;
+
+struct {
+    CipherSuite ciphersuite;
+    HPKEPublicKey root_public_hpke_key;
+    SignaturePublicKey root_public_signature_key;
+    /* SignWithLabel(root_private_signature_key, */
+    /*    "ExternalEncryptionInfoTBS", ExternalEncryptionInfoTBS) */
+    opaque external_encryption_signature&lt;V&gt;;
+} ExternalEncryptionInfo;
+</pre><a href="#section-3.1-4" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="sending-an-external-proposal-or-external-commit-to-the-group">
+<section id="section-3.2">
+        <h3 id="name-sending-an-external-proposa">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-sending-an-external-proposa" class="section-name selfRef">Sending an external proposal or external commit to the group</a>
+        </h3>
+<p id="section-3.2-1">A non-member client that wishes to send a message to the group, first constructs a <code>PublicMessage</code> called <code>external_message_plaintext</code>.
+The <code>PrivateExternalMessage</code> wire format wraps that <code>external_message_plaintext</code>, by encrypting it to the HPKE public key of the root of the ratchet tree (the root Node's <code>ParentNode.encryption_key</code>).
+<code>PrivateExternalMessage</code> is defined below.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<div class="lang-tls sourcecode" id="section-3.2-2">
+<pre>
+/*  PublicMessage.content.sender.sender_type != member  */
+PublicMessage external_message_plaintext;
+
+encrypted_public_message = EncryptWithLabel(root_public_hpke_key,
+    "PrivateExternalMessageContent", PrivateExternalMessageContext,
+    external_message_plaintext)
+
+struct {
+    /* PublicMessage (the plaintext) is pretty self contained */
+} PrivateExternalMessageContext;
+
+struct {
+    opaque group_id&lt;V&gt;;
+    uint64 epoch;
+    ContentType content_type;
+    opaque authenticated_data&lt;V&gt;;
+    HPKECiphertext encrypted_public_message&lt;V&gt;;
+} PrivateExternalMessage;
+
+PrivateExternalMessage.authenticated_data =
+   external_message_plaintext.content.authenticated_data
+
+struct {
+    ProtocolVersion version = mls10;
+    WireFormat wire_format;
+    select (MLSMessage.wire_format) {
+        case mls_public_message:
+            PublicMessage public_message;
+        case mls_private_message:
+            PrivateMessage private_message;
+        ...
+        case mls_private_external_message;
+            PrivateExternalMessage private_external_message
+    };
+} MLSMessage;
+</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="decryption-and-verification-by-members">
+<section id="section-3.3">
+        <h3 id="name-decryption-and-verification">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-decryption-and-verification" class="section-name selfRef">Decryption and verification by members</a>
+        </h3>
+<p id="section-3.3-1">Members receiving a <code>PrivateExternalMessage</code> check that the <code>group_id</code> matches a known group and that the epoch is the current epoch.
+They then decrypt and verify the <code>encrypted_public_message</code>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<div class="lang-tls sourcecode" id="section-3.3-2">
+<pre>
+/* root_private_hpke_key is node_priv[&lt;max&gt;] */
+external_message_plaintext = DecryptWithLabel(
+    root_private_hpke_key,
+    "PrivateExternalMessageContent", PrivateExternalMessageContext,
+    encrypted_public_message.kem_output,
+    encrypted_public_message.ciphertext)
+</pre><a href="#section-3.3-2" class="pilcrow">¶</a>
+</div>
+<p id="section-3.3-3">They then verify the following values in the <code>PrivateExternalMessage</code> match their corresponding field in the <code>external_message_plaintext.content</code>:<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.3-4.1">
+            <p id="section-3.3-4.1.1"><code>group_id</code>,<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.3-4.2">
+            <p id="section-3.3-4.2.1"><code>epoch</code>,<a href="#section-3.3-4.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.3-4.3">
+            <p id="section-3.3-4.3.1"><code>content_type</code>, and<a href="#section-3.3-4.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.3-4.4">
+            <p id="section-3.3-4.4.1"><code>authenticated_data</code><a href="#section-3.3-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-3.3-5">Finally, they process the <code>external_message_plaintext</code> as if it were a regular <code>PublicMessage</code>.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-4">
+      <h2 id="name-security-considerations">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-4-1">TODO Security<a href="#section-4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
-<section id="section-4">
+<section id="section-5">
       <h2 id="name-iana-considerations">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<p id="section-4-1">This document has no IANA actions.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-5-1">TODO IANA<a href="#section-5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="sec-normative-references">
-<section id="section-5">
-      <h2 id="name-normative-references">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<div id="sec-combined-references">
+<section id="section-6">
+      <h2 id="name-references">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
       </h2>
+<div id="sec-normative-references">
+<section id="section-6.1">
+        <h3 id="name-normative-references">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
 <dl class="references">
+<dt id="I-D.ietf-mls-extensions">[I-D.ietf-mls-extensions]</dt>
+        <dd>
+<span class="refAuthor">Robert, R.</span>, <span class="refTitle">"The Messaging Layer Security (MLS) Extensions"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-mls-extensions-08</span>, <time datetime="2025-07-21" class="refDate">21 July 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08">https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC2119">[RFC2119]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8174">[RFC8174]</dt>
-    <dd>
+        <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC9420">[RFC9420]</dt>
+      <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Beurdouche, B.</span>, <span class="refAuthor">Robert, R.</span>, <span class="refAuthor">Millican, J.</span>, <span class="refAuthor">Omara, E.</span>, and <span class="refAuthor">K. Cohn-Gordon</span>, <span class="refTitle">"The Messaging Layer Security (MLS) Protocol"</span>, <span class="seriesInfo">RFC 9420</span>, <span class="seriesInfo">DOI 10.17487/RFC9420</span>, <time datetime="2023-07" class="refDate">July 2023</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9420">https://www.rfc-editor.org/rfc/rfc9420</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 </dl>
+</section>
+</div>
+<div id="sec-informative-references">
+<section id="section-6.2">
+        <h3 id="name-informative-references">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="I-D.mahy-mls-semiprivatemessage">[I-D.mahy-mls-semiprivatemessage]</dt>
+      <dd>
+<span class="refAuthor">Mahy, R.</span>, <span class="refTitle">"Semi-Private Messages in the Messaging Layer Security (MLS) Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-mahy-mls-semiprivatemessage-05</span>, <time datetime="2025-04-21" class="refDate">21 April 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-mahy-mls-semiprivatemessage-05">https://datatracker.ietf.org/doc/html/draft-mahy-mls-semiprivatemessage-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</div>
 </section>
 </div>
 <div id="acknowledgments">
