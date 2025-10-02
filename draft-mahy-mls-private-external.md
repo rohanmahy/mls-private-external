@@ -27,8 +27,8 @@ venue:
   type: "Working Group"
   mail: "mls@ietf.org"
   arch: "https://mailarchive.ietf.org/arch/browse/mls/"
-  github: "rohanmahy/mls-secret-external"
-  latest: "https://rohanmahy.github.io/mls-secret-external/draft-mahy-mls-private-external.html"
+  github: "rohanmahy/mls-private-external"
+  latest: "https://rohanmahy.github.io/mls-private-external/draft-mahy-mls-private-external.html"
 
 author:
  -
