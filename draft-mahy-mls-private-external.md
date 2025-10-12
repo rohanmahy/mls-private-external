@@ -33,14 +33,15 @@ venue:
 author:
  -
     fullname: Rohan Mahy
-    organization: Rohan Mahy Consulting Services
     email: rohan.ietf@gmail.com
+ -
+    fullname: Mojtaba Chenani
+    organization: Ephemera
+    email: chenani@outlook.com
 
 normative:
 
 informative:
-
-...
 
 --- abstract
 
@@ -68,7 +69,7 @@ It also provides a way to convey that public key safely to prevent active attack
 
 # Mechanism
 
-## Additional information shared in every commit
+## Additional information shared in every commit {#ext-info}
 
 Groups participating in this mechanism include a `root_private_signature_key` component (see {{Section 4.6 of !I-D.ietf-mls-extensions}}) in the GroupContext of type `RootPrivateSignature`, containing a unique random private signature key corresponding to the group's cipher suite.
 Whenever a commit removes a member from a group, this component MUST be replaced with a new unique random private signature key.
@@ -170,7 +171,39 @@ Finally, they process the `external_message_plaintext` as if it were a regular `
 
 # Security Considerations
 
-TODO Security
+An established MLS group which only exchanges handshakes using MLS PrivateMessage enjoys a high level of privacy for its members.
+The GroupContext and the ratchet tree, including the contents of the credentials in MLS leaf nodes is not visible to outsiders nor to the DS.
+However, during the process of joining, private information is often leaked to the DS.
+This mechanism focuses on improving the privacy for the external joining mechanisms.
+
+There are three mechanisms for potential new members to join an MLS group: an existing member gets a KeyPackage (KP) for the new member and commits an Add proposal with the KP; the joiner sends an external proposal asking to join the group that needs to be committed by an existing member; or the joiner fetches the GroupInfo of the group (usually from the DS) and sends an external commit.
+In the base MLS protocol {{!RFC9420}}, an external join or external commit needs to be sent as an MLS PublicMessage, which greatly reduces the privacy of the group.
+
+## Security of External Proposals
+
+External Add proposals in {{!RFC9420}} are sent using an MLS PublicMessage, which is integrity protected but reveals the public signature key, MLS capabilities, MLS credential to the DS, and KeyPackageRef (used to correlate Welcome messages).
+If a public key representing the entire target MLS group is available, the external proposer can encrypt this information to all group members without revealing it to the DS.
+The external proposer needs a way to get this public key and not the key of an active attacker, and the DS and members need a reasonable authorization and rate limiting mechanisms to prevent from being overwhelmed by such encrypted requests.
+
+The `ExternalEncryptionInfo` defined in {{ext-info}} contains a per-group, per-epoch signature key shared by all members of the group
+The `ExternalEncryptionInfo` could be posted in transparency ledger, shared as gossip, or additionally signed by a specific member.
+The specific mechanism can be tailored to a specific application as needed.
+
+Application protocols above the MLS layer would also need to provide authorization. For example, in the MIMI protocol {{?I-D.ietf-mimi-protocol}} this could be a join code. Other techniques such as using single or limited use pseudonymous tokens, privacy pass {{?RFC9576}}, or anonymous credit tokens {{?I-D.schlesinger-cfrg-act}} are all reasonable options.
+The privacy of some of these techniques could also be reinforced by using Oblivious HTTP {{?RFC9458}}.
+
+## Security of External Commits
+
+
+## Security of KeyPackages
+
+As long as KeyPackages are exchanged securely out of band
+This extension extends privacy of the MLS GroupContext and ratchet tree
+
+
+## Security of Welcomes
+
+
 
 
 # IANA Considerations
@@ -179,8 +212,3 @@ TODO IANA
 
 
 --- back
-
-# Acknowledgments
-{:numbered="false"}
-
-TODO acknowledge.
