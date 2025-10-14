@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-12T01:46:32.965537+00:00",
+  "timestamp": "2025-10-14T01:43:03.526094+00:00",
   "repo": "rohanmahy/mls-private-external",
   "labels": [
     {
@@ -49,6 +49,55 @@
       "color": "ffffff"
     }
   ],
-  "issues": [],
+  "issues": [
+    {
+      "number": 1,
+      "id": "I_kwDOP6w7Qs7RJatQ",
+      "title": "Consider deriving a new encryption key pair from the epoch secret instead of using the root of the ratchet tree",
+      "url": "https://github.com/rohanmahy/mls-private-external/issues/1",
+      "state": "OPEN",
+      "author": "rohanmahy",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-13T07:59:30Z",
+      "updatedAt": "2025-10-13T07:59:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 2,
+      "id": "I_kwDOP6w7Qs7RJa67",
+      "title": "Complete IANA considerations",
+      "url": "https://github.com/rohanmahy/mls-private-external/issues/2",
+      "state": "OPEN",
+      "author": "rohanmahy",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-13T07:59:49Z",
+      "updatedAt": "2025-10-13T07:59:49Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 3,
+      "id": "I_kwDOP6w7Qs7RJbEu",
+      "title": "Add more to the security considerations section",
+      "url": "https://github.com/rohanmahy/mls-private-external/issues/3",
+      "state": "OPEN",
+      "author": "rohanmahy",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-10-13T08:00:03Z",
+      "updatedAt": "2025-10-13T08:00:03Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
   "pulls": []
 }
