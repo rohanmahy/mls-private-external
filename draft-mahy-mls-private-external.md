@@ -69,7 +69,7 @@ It also provides a way to convey that public key safely to prevent active attack
 
 # External Encryption Key Derivation
 
-Groups using this extension derive a dedicated HPKE key pair from the epoch secret for encrypting external messages. This key pair is derived independently from the ratchet tree structure.
+Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the epoch secret for encrypting external messages. This key pair is derived independently from the ratchet tree structure.
 
 The external encryption key pair is derived as follows:
 
