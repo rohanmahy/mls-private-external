@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-16T01:44:59.222582+00:00",
+  "timestamp": "2025-10-19T01:55:39.307173+00:00",
   "repo": "rohanmahy/mls-private-external",
   "labels": [
     {
@@ -58,11 +58,13 @@
       "state": "OPEN",
       "author": "rohanmahy",
       "authorAssociation": "OWNER",
-      "assignees": [],
+      "assignees": [
+        "mchenani"
+      ],
       "labels": [],
       "body": "",
       "createdAt": "2025-10-13T07:59:30Z",
-      "updatedAt": "2025-10-13T07:59:30Z",
+      "updatedAt": "2025-10-16T12:00:49Z",
       "closedAt": null,
       "comments": []
     },
@@ -99,5 +101,93 @@
       "comments": []
     }
   ],
-  "pulls": []
+  "pulls": [
+    {
+      "number": 4,
+      "id": "PR_kwDOP6w7Qs6uRtnm",
+      "title": "Using DeriveKeyPair from EpochSecret instead of root",
+      "url": "https://github.com/rohanmahy/mls-private-external/pull/4",
+      "state": "OPEN",
+      "author": "mchenani",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "closes #1 ",
+      "createdAt": "2025-10-17T10:32:31Z",
+      "updatedAt": "2025-10-17T11:25:14Z",
+      "baseRepository": "rohanmahy/mls-private-external",
+      "baseRefName": "main",
+      "baseRefOid": "462f8686a8989593f57d1fe118c90e27c549cc49",
+      "headRepository": "rohanmahy/mls-private-external",
+      "headRefName": "mc/deriving-hpke-from-epoch-instead-of-root",
+      "headRefOid": "35cf5eef2b4c471287bcc15ed652ccd663e25916",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOP6w7Qs7HpC2L",
+          "commit": {
+            "abbreviatedOid": "f89674f"
+          },
+          "author": "rohanmahy",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T10:42:28Z",
+          "updatedAt": "2025-10-17T10:42:28Z",
+          "comments": [
+            {
+              "originalPosition": 23,
+              "body": "```suggestion\r\nGroups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the epoch secret for encrypting external messages. This key pair is derived independently from the ratchet tree structure.\r\n```",
+              "createdAt": "2025-10-17T10:42:28Z",
+              "updatedAt": "2025-10-17T10:42:28Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOP6w7Qs7HpGiA",
+          "commit": {
+            "abbreviatedOid": "f89674f"
+          },
+          "author": "rohanmahy",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T10:45:14Z",
+          "updatedAt": "2025-10-17T10:45:14Z",
+          "comments": [
+            {
+              "originalPosition": 37,
+              "body": "since this is in a commit and the commit might remove members, do we want the external_encryption_secret to be based on the would-be epoch_secret of the new epoch started by the commit?",
+              "createdAt": "2025-10-17T10:45:14Z",
+              "updatedAt": "2025-10-17T10:50:20Z"
+            }
+          ]
+        },
+        {
+          "id": "PRR_kwDOP6w7Qs7HpJ8e",
+          "commit": {
+            "abbreviatedOid": "f89674f"
+          },
+          "author": "rohanmahy",
+          "authorAssociation": "OWNER",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2025-10-17T10:48:24Z",
+          "updatedAt": "2025-10-17T10:48:24Z",
+          "comments": [
+            {
+              "originalPosition": 44,
+              "body": "Move this line before line 70 and make line 70 a second level heading by adding a `#`",
+              "createdAt": "2025-10-17T10:48:24Z",
+              "updatedAt": "2025-10-17T10:48:24Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
