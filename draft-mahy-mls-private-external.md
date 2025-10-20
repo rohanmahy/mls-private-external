@@ -67,7 +67,9 @@ It also provides a way to convey that public key safely to prevent active attack
 
 {::boilerplate bcp14-tagged}
 
-# External Encryption Key Derivation
+# Mechanism
+
+## External Encryption Key Derivation
 
 Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the epoch secret for encrypting external messages. This key pair is derived independently from the ratchet tree structure.
 
@@ -83,21 +85,21 @@ external_encryption_secret =
 
 Where:
 
-- `epoch_secret` is the current epoch secret from {{!RFC9420}}
+- `epoch_secret` is the epoch secret from {{!RFC9420}}
 - `ExpandWithLabel` is from {{!RFC9420}}
 - `DeriveKeyPair` is from {{!RFC9180}}
 - `KDF.Nh` is the output size of the hash function for the cipher suite
 
 All group members in the current epoch can derive the same key pair from their shared epoch secret. The public key is made available to external senders via the `ExternalEncryptionInfo` structure ({{ext-info}}).
 
-# Mechanism
-
 ## Additional information shared in every commit {#ext-info}
 
 Groups participating in this mechanism include a `root_private_signature_key` component (see {{Section 4.6 of !I-D.ietf-mls-extensions}}) in the GroupContext of type `RootPrivateSignature`, containing a unique random private signature key corresponding to the group's cipher suite.
 Whenever a commit removes a member from a group, this component MUST be replaced with a new unique random private signature key.
 
-Members sending a commit include one additional Additional Authentication Data (AAD) component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}) of type `ExternalEncryptionInfo` in every commit (including commits sent in a `PrivateExternalMessage`).
+Members sending a commit need to calculate the future `epoch_secret`, `external_encryption_secret`, and `external_encryption_public_key` for the new epoch that would result if the commit is accepted.
+The commit sender includes one additional Additional Authentication Data (AAD) component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}) of type `ExternalEncryptionInfo` in every commit (including commits sent in a `PrivateExternalMessage`).
+The `ExternalEncryptionInfo` includes the `external_encryption_public_key` for the future epoch.
 
 > Note: SafeSignWithLabel is not used, because there are two different component IDs represented.
 
@@ -227,12 +229,12 @@ The privacy of some of these techniques could also be reinforced by using Oblivi
 
 ## Security of KeyPackages
 
+
 As long as KeyPackages are exchanged securely out of band
 This extension extends privacy of the MLS GroupContext and ratchet tree
 
 
 ## Security of Welcomes
-
 
 
 
