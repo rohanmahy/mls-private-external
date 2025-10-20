@@ -15,11 +15,10 @@ Expires: 23 April 2026                                          Ephemera
 Abstract
 
    MLS groups that use private handshakes lose member privacy when
-   sending external proposals.  This document addresses this
-   shortcoming, by encrypting external proposals using the public key of
-   the root of the MLS ratchet key.  It also provides a mechanism to
-   share this key and protect it from tampering by a malicious
-   intermediary.
+   sending external proposals.  This document addresses this shortcoming
+   by encrypting external proposals using an HPKE public key derived
+   from the epoch secret.  It also provides a mechanism to share this
+   key and protect it from tampering by a malicious intermediary.
 
 About This Document
 
@@ -75,10 +74,11 @@ Table of Contents
    1.  Introduction
    2.  Conventions and Definitions
    3.  Mechanism
-     3.1.  Additional information shared in every commit
-     3.2.  Sending an external proposal or external commit to the
+     3.1.  External Encryption Key Derivation
+     3.2.  Additional information shared in every commit
+     3.3.  Sending an external proposal or external commit to the
            group
-     3.3.  Decryption and verification by members
+     3.4.  Decryption and verification by members
    4.  Security Considerations
      4.1.  Security of External Proposals
      4.2.  Security of External Commits
@@ -117,10 +117,9 @@ Table of Contents
    credential and capabilities to the DS.
 
    This extension allows groups using PrivateMessage to maintain the
-   privacy of external handshake messages, by encrypting them to the
-   (public) encryption_key of the root node of the ratchet tree.  It
-   also provides a way to convey that public key safely to prevent
-   active attacks.
+   privacy of external handshake messages by encrypting them to a public
+   key derived from the group's epoch secret.  It also provides a way to
+   convey that public key safely to prevent active attacks.
 
 2.  Conventions and Definitions
 
@@ -132,7 +131,37 @@ Table of Contents
 
 3.  Mechanism
 
-3.1.  Additional information shared in every commit
+3.1.  External Encryption Key Derivation
+
+   Groups using this extension derive a dedicated HPKE [RFC9180] key
+   pair from the epoch secret for encrypting external messages.  This
+   key pair is derived independently from the ratchet tree structure.
+
+   The external encryption key pair is derived as follows:
+
+   external_encryption_secret =
+       ExpandWithLabel(epoch_secret, "external encryption", "", KDF.Nh)
+
+   (external_encryption_private_key, external_encryption_public_key) =
+       DeriveKeyPair(external_encryption_secret)
+
+   Where:
+
+   *  epoch_secret is the epoch secret from [RFC9420]
+
+   *  ExpandWithLabel is from [RFC9420]
+
+   *  DeriveKeyPair is from [RFC9180]
+
+   *  KDF.Nh is the output size of the hash function for the cipher
+      suite
+
+   All group members in the current epoch can derive the same key pair
+   from their shared epoch secret.  The public key is made available to
+   external senders via the ExternalEncryptionInfo structure
+   (Section 3.2).
+
+3.2.  Additional information shared in every commit
 
    Groups participating in this mechanism include a
    root_private_signature_key component (see Section 4.6 of
@@ -142,10 +171,14 @@ Table of Contents
    removes a member from a group, this component MUST be replaced with a
    new unique random private signature key.
 
-   Members sending a commit include one additional Additional
-   Authentication Data (AAD) component (see Section 4.9 of
-   [I-D.ietf-mls-extensions]) of type ExternalEncryptionInfo in every
-   commit (including commits sent in a PrivateExternalMessage).
+   Members sending a commit need to calculate the future epoch_secret,
+   external_encryption_secret, and external_encryption_public_key for
+   the new epoch that would result if the commit is accepted.  The
+   commit sender includes one additional Additional Authentication Data
+   (AAD) component (see Section 4.9 of [I-D.ietf-mls-extensions]) of
+   type ExternalEncryptionInfo in every commit (including commits sent
+   in a PrivateExternalMessage).  The ExternalEncryptionInfo includes
+   the external_encryption_public_key for the future epoch.
 
       Note: SafeSignWithLabel is not used, because there are two
       different component IDs represented.
@@ -159,32 +192,31 @@ Table of Contents
        opaque group_id<V>;
        uint64 epoch;
        CipherSuite ciphersuite;
-       HPKEPublicKey root_public_hpke_key;
+       HPKEPublicKey external_encryption_public_key;
        SignaturePublicKey root_public_signature_key;
    } ExternalEncryptionInfoTBS;
 
    struct {
        CipherSuite ciphersuite;
-       HPKEPublicKey root_public_hpke_key;
+       HPKEPublicKey external_encryption_public_key;
        SignaturePublicKey root_public_signature_key;
        /* SignWithLabel(root_private_signature_key, */
        /*    "ExternalEncryptionInfoTBS", ExternalEncryptionInfoTBS) */
        opaque external_encryption_signature<V>;
    } ExternalEncryptionInfo;
 
-3.2.  Sending an external proposal or external commit to the group
+3.3.  Sending an external proposal or external commit to the group
 
    A non-member client that wishes to send a message to the group, first
    constructs a PublicMessage called external_message_plaintext.  The
    PrivateExternalMessage wire format wraps that
-   external_message_plaintext, by encrypting it to the HPKE public key
-   of the root of the ratchet tree (the root Node's
-   ParentNode.encryption_key).  PrivateExternalMessage is defined below.
+   external_message_plaintext by encrypting it to the
+   external_encryption_public_key.
 
    /*  PublicMessage.content.sender.sender_type != member  */
    PublicMessage external_message_plaintext;
 
-   encrypted_public_message = EncryptWithLabel(root_public_hpke_key,
+   encrypted_public_message = EncryptWithLabel(external_encryption_public_key,
        "PrivateExternalMessageContent", PrivateExternalMessageContext,
        external_message_plaintext)
 
@@ -217,15 +249,24 @@ Table of Contents
        };
    } MLSMessage;
 
-3.3.  Decryption and verification by members
+3.4.  Decryption and verification by members
 
    Members receiving a PrivateExternalMessage check that the group_id
-   matches a known group and that the epoch is the current epoch.  They
-   then decrypt and verify the encrypted_public_message.
+   matches a known group and that the epoch is the current epoch.
 
-   /* root_private_hpke_key is node_priv[<max>] */
+   To decrypt the message, members first derive the external encryption
+   key pair from their current epoch secret:
+
+   /* Derive the external encryption key pair from epoch_secret */
+   external_encryption_secret =
+       ExpandWithLabel(epoch_secret, "external encryption", "", KDF.Nh)
+
+   (external_encryption_private_key, external_encryption_public_key) =
+       DeriveKeyPair(external_encryption_secret)
+
+   /* Decrypt the external message */
    external_message_plaintext = DecryptWithLabel(
-       root_private_hpke_key,
+       external_encryption_private_key,
        "PrivateExternalMessageContent", PrivateExternalMessageContext,
        encrypted_public_message.kem_output,
        encrypted_public_message.ciphertext)
@@ -278,7 +319,7 @@ Table of Contents
    members need a reasonable authorization and rate limiting mechanisms
    to prevent from being overwhelmed by such encrypted requests.
 
-   The ExternalEncryptionInfo defined in Section 3.1 contains a per-
+   The ExternalEncryptionInfo defined in Section 3.2 contains a per-
    group, per-epoch signature key shared by all members of the group The
    ExternalEncryptionInfo could be posted in transparency ledger, shared
    as gossip, or additionally signed by a specific member.  The specific
@@ -331,6 +372,10 @@ Table of Contents
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/rfc/rfc8174>.
+
+   [RFC9180]  Barnes, R., Bhargavan, K., Lipp, B., and C. Wood, "Hybrid
+              Public Key Encryption", RFC 9180, DOI 10.17487/RFC9180,
+              February 2022, <https://www.rfc-editor.org/rfc/rfc9180>.
 
    [RFC9420]  Barnes, R., Beurdouche, B., Robert, R., Millican, J.,
               Omara, E., and K. Cohn-Gordon, "The Messaging Layer

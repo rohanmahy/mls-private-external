@@ -8,7 +8,7 @@
 <meta content="Rohan Mahy" name="author">
 <meta content="Mojtaba Chenani" name="author">
 <meta content="
-       MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming, by encrypting external proposals using the public key of the root of the MLS ratchet key. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary. 
+       MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming by encrypting external proposals using an HPKE public key derived from the epoch secret. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
 <meta content="private external proposal" name="keyword">
@@ -1091,7 +1091,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Private External Message extensions for Messaging Layer Security (MLS)</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming, by encrypting external proposals using the public key of the root of the MLS ratchet key. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">MLS groups that use private handshakes lose member privacy when sending external proposals. This document addresses this shortcoming by encrypting external proposals using an HPKE public key derived from the epoch secret. It also provides a mechanism to share this key and protect it from tampering by a malicious intermediary.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1167,13 +1167,16 @@ svg :is([fill="white"], [fill^="#fff"]) {
             <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-mechanism" class="internal xref">Mechanism</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
-                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-additional-information-shar" class="internal xref">Additional information shared in every commit</a></p>
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-external-encryption-key-der" class="internal xref">External Encryption Key Derivation</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
-                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-sending-an-external-proposa" class="internal xref">Sending an external proposal or external commit to the group</a></p>
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-additional-information-shar" class="internal xref">Additional information shared in every commit</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
-                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-decryption-and-verification" class="internal xref">Decryption and verification by members</a></p>
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-sending-an-external-proposa" class="internal xref">Sending an external proposal or external commit to the group</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-decryption-and-verification" class="internal xref">Decryption and verification by members</a></p>
 </li>
             </ul>
 </li>
@@ -1224,7 +1227,7 @@ As of this writing there are non-trivial commercial deployments using both the P
 In the PublicMessage model, the DS usually can provide (authorized) non-members with enough information that they can join a group via an external commit.
 Even in the PublicMessage model, some (usually large) groups use external proposals to join.
 In the PrivateMessage model, (authorized) non-members can also join using external proposals (or rarely using external commits if the GroupInfo is shared by an existing member), however the joiner is currently forced to send the proposal (or commit) as a PublicMessage and therefore reveal potentially private information such as their credential and capabilities to the DS.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This extension allows groups using PrivateMessage to maintain the privacy of external handshake messages, by encrypting them to the (public) <code>encryption_key</code> of the root node of the ratchet tree.
+<p id="section-1-3">This extension allows groups using PrivateMessage to maintain the privacy of external handshake messages by encrypting them to a public key derived from the group's epoch secret.
 It also provides a way to convey that public key safely to prevent active attacks.<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1244,20 +1247,56 @@ appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶<
       <h2 id="name-mechanism">
 <a href="#section-3" class="section-number selfRef">3. </a><a href="#name-mechanism" class="section-name selfRef">Mechanism</a>
       </h2>
-<div id="ext-info">
+<div id="external-encryption-key-derivation">
 <section id="section-3.1">
-        <h3 id="name-additional-information-shar">
-<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-additional-information-shar" class="section-name selfRef">Additional information shared in every commit</a>
+        <h3 id="name-external-encryption-key-der">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-external-encryption-key-der" class="section-name selfRef">External Encryption Key Derivation</a>
         </h3>
-<p id="section-3.1-1">Groups participating in this mechanism include a <code>root_private_signature_key</code> component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.6" class="relref">Section 4.6</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) in the GroupContext of type <code>RootPrivateSignature</code>, containing a unique random private signature key corresponding to the group's cipher suite.
-Whenever a commit removes a member from a group, this component <span class="bcp14">MUST</span> be replaced with a new unique random private signature key.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
-<p id="section-3.1-2">Members sending a commit include one additional Additional Authentication Data (AAD) component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.9" class="relref">Section 4.9</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) of type <code>ExternalEncryptionInfo</code> in every commit (including commits sent in a <code>PrivateExternalMessage</code>).<a href="#section-3.1-2" class="pilcrow">¶</a></p>
-<ul class="normal ulEmpty">
-<li class="normal ulEmpty" id="section-3.1-3.1">
-            <p id="section-3.1-3.1.1">Note: SafeSignWithLabel is not used, because there are two different component IDs represented.<a href="#section-3.1-3.1.1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">Groups using this extension derive a dedicated HPKE <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span> key pair from the epoch secret for encrypting external messages. This key pair is derived independently from the ratchet tree structure.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">The external encryption key pair is derived as follows:<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-3.1-3">
+<pre>
+external_encryption_secret =
+    ExpandWithLabel(epoch_secret, "external encryption", "", KDF.Nh)
+
+(external_encryption_private_key, external_encryption_public_key) =
+    DeriveKeyPair(external_encryption_secret)
+</pre><a href="#section-3.1-3" class="pilcrow">¶</a>
+</div>
+<p id="section-3.1-4">Where:<a href="#section-3.1-4" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-3.1-5.1">
+            <p id="section-3.1-5.1.1"><code>epoch_secret</code> is the epoch secret from <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>]</span><a href="#section-3.1-5.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.2">
+            <p id="section-3.1-5.2.1"><code>ExpandWithLabel</code> is from <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>]</span><a href="#section-3.1-5.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.3">
+            <p id="section-3.1-5.3.1"><code>DeriveKeyPair</code> is from <span>[<a href="#RFC9180" class="cite xref">RFC9180</a>]</span><a href="#section-3.1-5.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-3.1-5.4">
+            <p id="section-3.1-5.4.1"><code>KDF.Nh</code> is the output size of the hash function for the cipher suite<a href="#section-3.1-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<div class="lang-tls sourcecode" id="section-3.1-4">
+<p id="section-3.1-6">All group members in the current epoch can derive the same key pair from their shared epoch secret. The public key is made available to external senders via the <code>ExternalEncryptionInfo</code> structure (<a href="#ext-info" class="auto internal xref">Section 3.2</a>).<a href="#section-3.1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="ext-info">
+<section id="section-3.2">
+        <h3 id="name-additional-information-shar">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-additional-information-shar" class="section-name selfRef">Additional information shared in every commit</a>
+        </h3>
+<p id="section-3.2-1">Groups participating in this mechanism include a <code>root_private_signature_key</code> component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.6" class="relref">Section 4.6</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) in the GroupContext of type <code>RootPrivateSignature</code>, containing a unique random private signature key corresponding to the group's cipher suite.
+Whenever a commit removes a member from a group, this component <span class="bcp14">MUST</span> be replaced with a new unique random private signature key.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">Members sending a commit need to calculate the future <code>epoch_secret</code>, <code>external_encryption_secret</code>, and <code>external_encryption_public_key</code> for the new epoch that would result if the commit is accepted.
+The commit sender includes one additional Additional Authentication Data (AAD) component (see <span><a href="https://datatracker.ietf.org/doc/html/draft-ietf-mls-extensions-08#section-4.9" class="relref">Section 4.9</a> of [<a href="#I-D.ietf-mls-extensions" class="cite xref">I-D.ietf-mls-extensions</a>]</span>) of type <code>ExternalEncryptionInfo</code> in every commit (including commits sent in a <code>PrivateExternalMessage</code>).
+The <code>ExternalEncryptionInfo</code> includes the <code>external_encryption_public_key</code> for the future epoch.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<ul class="normal ulEmpty">
+<li class="normal ulEmpty" id="section-3.2-3.1">
+            <p id="section-3.2-3.1.1">Note: SafeSignWithLabel is not used, because there are two different component IDs represented.<a href="#section-3.2-3.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<div class="lang-tls sourcecode" id="section-3.2-4">
 <pre>
 struct {
     opaque root_private_signature_key&lt;V&gt;;
@@ -1268,36 +1307,35 @@ struct {
     opaque group_id&lt;V&gt;;
     uint64 epoch;
     CipherSuite ciphersuite;
-    HPKEPublicKey root_public_hpke_key;
+    HPKEPublicKey external_encryption_public_key;
     SignaturePublicKey root_public_signature_key;
 } ExternalEncryptionInfoTBS;
 
 struct {
     CipherSuite ciphersuite;
-    HPKEPublicKey root_public_hpke_key;
+    HPKEPublicKey external_encryption_public_key;
     SignaturePublicKey root_public_signature_key;
     /* SignWithLabel(root_private_signature_key, */
     /*    "ExternalEncryptionInfoTBS", ExternalEncryptionInfoTBS) */
     opaque external_encryption_signature&lt;V&gt;;
 } ExternalEncryptionInfo;
-</pre><a href="#section-3.1-4" class="pilcrow">¶</a>
+</pre><a href="#section-3.2-4" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="sending-an-external-proposal-or-external-commit-to-the-group">
-<section id="section-3.2">
+<section id="section-3.3">
         <h3 id="name-sending-an-external-proposa">
-<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-sending-an-external-proposa" class="section-name selfRef">Sending an external proposal or external commit to the group</a>
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-sending-an-external-proposa" class="section-name selfRef">Sending an external proposal or external commit to the group</a>
         </h3>
-<p id="section-3.2-1">A non-member client that wishes to send a message to the group, first constructs a <code>PublicMessage</code> called <code>external_message_plaintext</code>.
-The <code>PrivateExternalMessage</code> wire format wraps that <code>external_message_plaintext</code>, by encrypting it to the HPKE public key of the root of the ratchet tree (the root Node's <code>ParentNode.encryption_key</code>).
-<code>PrivateExternalMessage</code> is defined below.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<div class="lang-tls sourcecode" id="section-3.2-2">
+<p id="section-3.3-1">A non-member client that wishes to send a message to the group, first constructs a <code>PublicMessage</code> called <code>external_message_plaintext</code>.
+The <code>PrivateExternalMessage</code> wire format wraps that <code>external_message_plaintext</code> by encrypting it to the <code>external_encryption_public_key</code>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<div class="lang-tls sourcecode" id="section-3.3-2">
 <pre>
 /*  PublicMessage.content.sender.sender_type != member  */
 PublicMessage external_message_plaintext;
 
-encrypted_public_message = EncryptWithLabel(root_public_hpke_key,
+encrypted_public_message = EncryptWithLabel(external_encryption_public_key,
     "PrivateExternalMessageContent", PrivateExternalMessageContext,
     external_message_plaintext)
 
@@ -1329,43 +1367,50 @@ struct {
             PrivateExternalMessage private_external_message
     };
 } MLSMessage;
-</pre><a href="#section-3.2-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.3-2" class="pilcrow">¶</a>
 </div>
 </section>
 </div>
 <div id="decryption-and-verification-by-members">
-<section id="section-3.3">
+<section id="section-3.4">
         <h3 id="name-decryption-and-verification">
-<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-decryption-and-verification" class="section-name selfRef">Decryption and verification by members</a>
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-decryption-and-verification" class="section-name selfRef">Decryption and verification by members</a>
         </h3>
-<p id="section-3.3-1">Members receiving a <code>PrivateExternalMessage</code> check that the <code>group_id</code> matches a known group and that the epoch is the current epoch.
-They then decrypt and verify the <code>encrypted_public_message</code>.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
-<div class="lang-tls sourcecode" id="section-3.3-2">
+<p id="section-3.4-1">Members receiving a <code>PrivateExternalMessage</code> check that the <code>group_id</code> matches a known group and that the epoch is the current epoch.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.4-2">To decrypt the message, members first derive the external encryption key pair from their current epoch secret:<a href="#section-3.4-2" class="pilcrow">¶</a></p>
+<div class="lang-tls sourcecode" id="section-3.4-3">
 <pre>
-/* root_private_hpke_key is node_priv[&lt;max&gt;] */
+/* Derive the external encryption key pair from epoch_secret */
+external_encryption_secret =
+    ExpandWithLabel(epoch_secret, "external encryption", "", KDF.Nh)
+
+(external_encryption_private_key, external_encryption_public_key) =
+    DeriveKeyPair(external_encryption_secret)
+
+/* Decrypt the external message */
 external_message_plaintext = DecryptWithLabel(
-    root_private_hpke_key,
+    external_encryption_private_key,
     "PrivateExternalMessageContent", PrivateExternalMessageContext,
     encrypted_public_message.kem_output,
     encrypted_public_message.ciphertext)
-</pre><a href="#section-3.3-2" class="pilcrow">¶</a>
+</pre><a href="#section-3.4-3" class="pilcrow">¶</a>
 </div>
-<p id="section-3.3-3">They then verify the following values in the <code>PrivateExternalMessage</code> match their corresponding field in the <code>external_message_plaintext.content</code>:<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.4-4">They then verify the following values in the <code>PrivateExternalMessage</code> match their corresponding field in the <code>external_message_plaintext.content</code>:<a href="#section-3.4-4" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3.3-4.1">
-            <p id="section-3.3-4.1.1"><code>group_id</code>,<a href="#section-3.3-4.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-3.4-5.1">
+            <p id="section-3.4-5.1.1"><code>group_id</code>,<a href="#section-3.4-5.1.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-4.2">
-            <p id="section-3.3-4.2.1"><code>epoch</code>,<a href="#section-3.3-4.2.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.2">
+            <p id="section-3.4-5.2.1"><code>epoch</code>,<a href="#section-3.4-5.2.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-4.3">
-            <p id="section-3.3-4.3.1"><code>content_type</code>, and<a href="#section-3.3-4.3.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.3">
+            <p id="section-3.4-5.3.1"><code>content_type</code>, and<a href="#section-3.4-5.3.1" class="pilcrow">¶</a></p>
 </li>
-          <li class="normal" id="section-3.3-4.4">
-            <p id="section-3.3-4.4.1"><code>authenticated_data</code><a href="#section-3.3-4.4.1" class="pilcrow">¶</a></p>
+          <li class="normal" id="section-3.4-5.4">
+            <p id="section-3.4-5.4.1"><code>authenticated_data</code><a href="#section-3.4-5.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-3.3-5">Finally, they process the <code>external_message_plaintext</code> as if it were a regular <code>PublicMessage</code>.<a href="#section-3.3-5" class="pilcrow">¶</a></p>
+<p id="section-3.4-6">Finally, they process the <code>external_message_plaintext</code> as if it were a regular <code>PublicMessage</code>.<a href="#section-3.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1389,7 +1434,7 @@ In the base MLS protocol <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>
 <p id="section-4.1-1">External Add proposals in <span>[<a href="#RFC9420" class="cite xref">RFC9420</a>]</span> are sent using an MLS PublicMessage, which is integrity protected but reveals the public signature key, MLS capabilities, MLS credential to the DS, and KeyPackageRef (used to correlate Welcome messages).
 If a public key representing the entire target MLS group is available, the external proposer can encrypt this information to all group members without revealing it to the DS.
 The external proposer needs a way to get this public key and not the key of an active attacker, and the DS and members need a reasonable authorization and rate limiting mechanisms to prevent from being overwhelmed by such encrypted requests.<a href="#section-4.1-1" class="pilcrow">¶</a></p>
-<p id="section-4.1-2">The <code>ExternalEncryptionInfo</code> defined in <a href="#ext-info" class="auto internal xref">Section 3.1</a> contains a per-group, per-epoch signature key shared by all members of the group
+<p id="section-4.1-2">The <code>ExternalEncryptionInfo</code> defined in <a href="#ext-info" class="auto internal xref">Section 3.2</a> contains a per-group, per-epoch signature key shared by all members of the group
 The <code>ExternalEncryptionInfo</code> could be posted in transparency ledger, shared as gossip, or additionally signed by a specific member.
 The specific mechanism can be tailored to a specific application as needed.<a href="#section-4.1-2" class="pilcrow">¶</a></p>
 <p id="section-4.1-3">Application protocols above the MLS layer would also need to provide authorization. For example, in the MIMI protocol <span>[<a href="#I-D.ietf-mimi-protocol" class="cite xref">I-D.ietf-mimi-protocol</a>]</span> this could be a join code. Other techniques such as using single or limited use pseudonymous tokens, privacy pass <span>[<a href="#RFC9576" class="cite xref">RFC9576</a>]</span>, or anonymous credit tokens <span>[<a href="#I-D.schlesinger-cfrg-act" class="cite xref">I-D.schlesinger-cfrg-act</a>]</span> are all reasonable options.
@@ -1447,6 +1492,10 @@ In order to forward a Welcome message to the correct recipient, the DS needs to 
 <dt id="RFC8174">[RFC8174]</dt>
         <dd>
 <span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8174">https://www.rfc-editor.org/rfc/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9180">[RFC9180]</dt>
+        <dd>
+<span class="refAuthor">Barnes, R.</span>, <span class="refAuthor">Bhargavan, K.</span>, <span class="refAuthor">Lipp, B.</span>, and <span class="refAuthor">C. Wood</span>, <span class="refTitle">"Hybrid Public Key Encryption"</span>, <span class="seriesInfo">RFC 9180</span>, <span class="seriesInfo">DOI 10.17487/RFC9180</span>, <time datetime="2022-02" class="refDate">February 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9180">https://www.rfc-editor.org/rfc/rfc9180</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9420">[RFC9420]</dt>
       <dd>
