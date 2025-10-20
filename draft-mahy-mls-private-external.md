@@ -226,17 +226,15 @@ The privacy of some of these techniques could also be reinforced by using Oblivi
 
 ## Security of External Commits
 
+TODO
 
-## Security of KeyPackages
+## Security of KeyPackages and Welcomes
 
+In the classical usage of MLS, a member of a group fetches a KeyPackage, commits an Add proposal containing that KeyPackage, the sends a Welcome to the new member.
+Both the returned KeyPackage and the query for it could reveal a lot of private information.
+In order to forward a Welcome message to the correct recipient, the DS needs to be able to associate the `KeyPackageRef` with some resource that eventually delivers to the appropriate client.
 
-As long as KeyPackages are exchanged securely out of band
-This extension extends privacy of the MLS GroupContext and ratchet tree
-
-
-## Security of Welcomes
-
-
+TODO add more.
 
 # IANA Considerations
 
