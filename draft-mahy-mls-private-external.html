@@ -1190,10 +1190,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
                 <p id="section-toc.1-1.4.2.2.1"><a href="#section-4.2" class="auto internal xref">4.2</a>.  <a href="#name-security-of-external-commit" class="internal xref">Security of External Commits</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.3">
-                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-security-of-keypackages" class="internal xref">Security of KeyPackages</a></p>
-</li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4.2.4">
-                <p id="section-toc.1-1.4.2.4.1"><a href="#section-4.4" class="auto internal xref">4.4</a>.  <a href="#name-security-of-welcomes" class="internal xref">Security of Welcomes</a></p>
+                <p id="section-toc.1-1.4.2.3.1"><a href="#section-4.3" class="auto internal xref">4.3</a>.  <a href="#name-security-of-keypackages-and" class="internal xref">Security of KeyPackages and Welcomes</a></p>
 </li>
             </ul>
 </li>
@@ -1448,23 +1445,19 @@ The privacy of some of these techniques could also be reinforced by using Oblivi
 <section id="section-4.2">
         <h3 id="name-security-of-external-commit">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-security-of-external-commit" class="section-name selfRef">Security of External Commits</a>
-      </h3>
-</section>
-</div>
-<div id="security-of-keypackages">
-<section id="section-4.3">
-        <h3 id="name-security-of-keypackages">
-<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-security-of-keypackages" class="section-name selfRef">Security of KeyPackages</a>
         </h3>
-<p id="section-4.3-1">As long as KeyPackages are exchanged securely out of band
-This extension extends privacy of the MLS GroupContext and ratchet tree<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">TODO<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="security-of-welcomes">
-<section id="section-4.4">
-        <h3 id="name-security-of-welcomes">
-<a href="#section-4.4" class="section-number selfRef">4.4. </a><a href="#name-security-of-welcomes" class="section-name selfRef">Security of Welcomes</a>
-      </h3>
+<div id="security-of-keypackages-and-welcomes">
+<section id="section-4.3">
+        <h3 id="name-security-of-keypackages-and">
+<a href="#section-4.3" class="section-number selfRef">4.3. </a><a href="#name-security-of-keypackages-and" class="section-name selfRef">Security of KeyPackages and Welcomes</a>
+        </h3>
+<p id="section-4.3-1">In the classical usage of MLS, a member of a group fetches a KeyPackage, commits an Add proposal containing that KeyPackage, the sends a Welcome to the new member.
+Both the returned KeyPackage and the query for it could reveal a lot of private information.
+In order to forward a Welcome message to the correct recipient, the DS needs to be able to associate the <code>KeyPackageRef</code> with some resource that eventually delivers to the appropriate client.<a href="#section-4.3-1" class="pilcrow">¶</a></p>
+<p id="section-4.3-2">TODO add more.<a href="#section-4.3-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
