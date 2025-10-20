@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 20 April 2026                                          Ephemera
-                                                         17 October 2025
+Expires: 23 April 2026                                          Ephemera
+                                                         20 October 2025
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 April 2026.
+   This Internet-Draft will expire on 23 April 2026.
 
 Copyright Notice
 
@@ -73,21 +73,21 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  External Encryption Key Derivation
-   4.  Mechanism
-     4.1.  Additional information shared in every commit
-     4.2.  Sending an external proposal or external commit to the
+   3.  Mechanism
+     3.1.  External Encryption Key Derivation
+     3.2.  Additional information shared in every commit
+     3.3.  Sending an external proposal or external commit to the
            group
-     4.3.  Decryption and verification by members
-   5.  Security Considerations
-     5.1.  Security of External Proposals
-     5.2.  Security of External Commits
-     5.3.  Security of KeyPackages
-     5.4.  Security of Welcomes
-   6.  IANA Considerations
-   7.  References
-     7.1.  Normative References
-     7.2.  Informative References
+     3.4.  Decryption and verification by members
+   4.  Security Considerations
+     4.1.  Security of External Proposals
+     4.2.  Security of External Commits
+     4.3.  Security of KeyPackages
+     4.4.  Security of Welcomes
+   5.  IANA Considerations
+   6.  References
+     6.1.  Normative References
+     6.2.  Informative References
    Authors' Addresses
 
 1.  Introduction
@@ -130,7 +130,9 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  External Encryption Key Derivation
+3.  Mechanism
+
+3.1.  External Encryption Key Derivation
 
    Groups using this extension derive a dedicated HPKE [RFC9180] key
    pair from the epoch secret for encrypting external messages.  This
@@ -146,7 +148,7 @@ Table of Contents
 
    Where:
 
-   *  epoch_secret is the current epoch secret from [RFC9420]
+   *  epoch_secret is the epoch secret from [RFC9420]
 
    *  ExpandWithLabel is from [RFC9420]
 
@@ -158,11 +160,9 @@ Table of Contents
    All group members in the current epoch can derive the same key pair
    from their shared epoch secret.  The public key is made available to
    external senders via the ExternalEncryptionInfo structure
-   (Section 4.1).
+   (Section 3.2).
 
-4.  Mechanism
-
-4.1.  Additional information shared in every commit
+3.2.  Additional information shared in every commit
 
    Groups participating in this mechanism include a
    root_private_signature_key component (see Section 4.6 of
@@ -172,10 +172,14 @@ Table of Contents
    removes a member from a group, this component MUST be replaced with a
    new unique random private signature key.
 
-   Members sending a commit include one additional Additional
-   Authentication Data (AAD) component (see Section 4.9 of
-   [I-D.ietf-mls-extensions]) of type ExternalEncryptionInfo in every
-   commit (including commits sent in a PrivateExternalMessage).
+   Members sending a commit need to calculate the future epoch_secret,
+   external_encryption_secret, and external_encryption_public_key for
+   the new epoch that would result if the commit is accepted.  The
+   commit sender includes one additional Additional Authentication Data
+   (AAD) component (see Section 4.9 of [I-D.ietf-mls-extensions]) of
+   type ExternalEncryptionInfo in every commit (including commits sent
+   in a PrivateExternalMessage).  The ExternalEncryptionInfo includes
+   the external_encryption_public_key for the future epoch.
 
       Note: SafeSignWithLabel is not used, because there are two
       different component IDs represented.
@@ -202,7 +206,7 @@ Table of Contents
        opaque external_encryption_signature<V>;
    } ExternalEncryptionInfo;
 
-4.2.  Sending an external proposal or external commit to the group
+3.3.  Sending an external proposal or external commit to the group
 
    A non-member client that wishes to send a message to the group, first
    constructs a PublicMessage called external_message_plaintext.  The
@@ -246,7 +250,7 @@ Table of Contents
        };
    } MLSMessage;
 
-4.3.  Decryption and verification by members
+3.4.  Decryption and verification by members
 
    Members receiving a PrivateExternalMessage check that the group_id
    matches a known group and that the epoch is the current epoch.
@@ -283,7 +287,7 @@ Table of Contents
    Finally, they process the external_message_plaintext as if it were a
    regular PublicMessage.
 
-5.  Security Considerations
+4.  Security Considerations
 
    An established MLS group which only exchanges handshakes using MLS
    PrivateMessage enjoys a high level of privacy for its members.  The
@@ -303,7 +307,7 @@ Table of Contents
    sent as an MLS PublicMessage, which greatly reduces the privacy of
    the group.
 
-5.1.  Security of External Proposals
+4.1.  Security of External Proposals
 
    External Add proposals in [RFC9420] are sent using an MLS
    PublicMessage, which is integrity protected but reveals the public
@@ -316,7 +320,7 @@ Table of Contents
    members need a reasonable authorization and rate limiting mechanisms
    to prevent from being overwhelmed by such encrypted requests.
 
-   The ExternalEncryptionInfo defined in Section 4.1 contains a per-
+   The ExternalEncryptionInfo defined in Section 3.2 contains a per-
    group, per-epoch signature key shared by all members of the group The
    ExternalEncryptionInfo could be posted in transparency ledger, shared
    as gossip, or additionally signed by a specific member.  The specific
@@ -330,22 +334,22 @@ Table of Contents
    all reasonable options.  The privacy of some of these techniques
    could also be reinforced by using Oblivious HTTP [RFC9458].
 
-5.2.  Security of External Commits
+4.2.  Security of External Commits
 
-5.3.  Security of KeyPackages
+4.3.  Security of KeyPackages
 
    As long as KeyPackages are exchanged securely out of band This
    extension extends privacy of the MLS GroupContext and ratchet tree
 
-5.4.  Security of Welcomes
+4.4.  Security of Welcomes
 
-6.  IANA Considerations
+5.  IANA Considerations
 
    TODO IANA
 
-7.  References
+6.  References
 
-7.1.  Normative References
+6.1.  Normative References
 
    [I-D.ietf-mls-extensions]
               Robert, R., "The Messaging Layer Security (MLS)
@@ -372,7 +376,7 @@ Table of Contents
               Security (MLS) Protocol", RFC 9420, DOI 10.17487/RFC9420,
               July 2023, <https://www.rfc-editor.org/rfc/rfc9420>.
 
-7.2.  Informative References
+6.2.  Informative References
 
    [I-D.ietf-mimi-protocol]
               Barnes, R., Hodgson, M., Kohbrok, K., Mahy, R., Ralston,
