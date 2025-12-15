@@ -238,7 +238,27 @@ TODO add more.
 
 # IANA Considerations
 
-TODO IANA
+This document registers two new MLS Component Types in the Specification Required range.
 
+
+## root_private_signature_key MLS Component Type
+
+- Value: TBD (suggested value 0x000A)
+- Name: root_private_signature_key
+- Where: GC
+- Recommended: Y
+- Reference: RFC XXXX
+
+## external_encryption_public_key MLS Component Type
+
+- Value: TBD (suggested value 0x000B)
+- Name: external_encryption_public_key
+- Where: AD
+- Recommended: Y
+- Reference: RFC XXXX
+
+## PrivateExternalMessage MLS WireFormat
+
+TODO
 
 --- back
