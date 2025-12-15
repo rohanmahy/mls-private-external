@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 23 April 2026                                          Ephemera
-                                                         20 October 2025
+Expires: 18 June 2026                                           Ephemera
+                                                        15 December 2025
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 April 2026.
+   This Internet-Draft will expire on 18 June 2026.
 
 Copyright Notice
 
@@ -82,9 +82,11 @@ Table of Contents
    4.  Security Considerations
      4.1.  Security of External Proposals
      4.2.  Security of External Commits
-     4.3.  Security of KeyPackages
-     4.4.  Security of Welcomes
+     4.3.  Security of KeyPackages and Welcomes
    5.  IANA Considerations
+     5.1.  root_private_signature_key MLS Component Type
+     5.2.  external_encryption_public_key MLS Component Type
+     5.3.  PrivateExternalMessage MLS WireFormat
    6.  References
      6.1.  Normative References
      6.2.  Informative References
@@ -336,16 +338,52 @@ Table of Contents
 
 4.2.  Security of External Commits
 
-4.3.  Security of KeyPackages
+   TODO
 
-   As long as KeyPackages are exchanged securely out of band This
-   extension extends privacy of the MLS GroupContext and ratchet tree
+4.3.  Security of KeyPackages and Welcomes
 
-4.4.  Security of Welcomes
+   In the classical usage of MLS, a member of a group fetches a
+   KeyPackage, commits an Add proposal containing that KeyPackage, the
+   sends a Welcome to the new member.  Both the returned KeyPackage and
+   the query for it could reveal a lot of private information.  In order
+   to forward a Welcome message to the correct recipient, the DS needs
+   to be able to associate the KeyPackageRef with some resource that
+   eventually delivers to the appropriate client.
+
+   TODO add more.
 
 5.  IANA Considerations
 
-   TODO IANA
+   This document registers two new MLS Component Types in the
+   Specification Required range.
+
+5.1.  root_private_signature_key MLS Component Type
+
+   *  Value: TBD (suggested value 0x000A)
+
+   *  Name: root_private_signature_key
+
+   *  Where: GC
+
+   *  Recommended: Y
+
+   *  Reference: RFC XXXX
+
+5.2.  external_encryption_public_key MLS Component Type
+
+   *  Value: TBD (suggested value 0x000B)
+
+   *  Name: external_encryption_public_key
+
+   *  Where: AD
+
+   *  Recommended: Y
+
+   *  Reference: RFC XXXX
+
+5.3.  PrivateExternalMessage MLS WireFormat
+
+   TODO
 
 6.  References
 
@@ -382,9 +420,9 @@ Table of Contents
               Barnes, R., Hodgson, M., Kohbrok, K., Mahy, R., Ralston,
               T., and R. Robert, "More Instant Messaging
               Interoperability (MIMI) using HTTPS and MLS", Work in
-              Progress, Internet-Draft, draft-ietf-mimi-protocol-04, 7
-              July 2025, <https://datatracker.ietf.org/doc/html/draft-
-              ietf-mimi-protocol-04>.
+              Progress, Internet-Draft, draft-ietf-mimi-protocol-05, 20
+              October 2025, <https://datatracker.ietf.org/doc/html/
+              draft-ietf-mimi-protocol-05>.
 
    [I-D.mahy-mls-semiprivatemessage]
               Mahy, R., "Semi-Private Messages in the Messaging Layer
