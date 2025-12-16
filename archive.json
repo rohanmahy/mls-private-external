@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-10-21T01:46:52.894019+00:00",
+  "timestamp": "2025-12-16T01:58:06.915598+00:00",
   "repo": "rohanmahy/mls-private-external",
   "labels": [
     {
@@ -258,6 +258,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 6,
+      "id": "PR_kwDOP6w7Qs649-BD",
+      "title": "add component IDs",
+      "url": "https://github.com/rohanmahy/mls-private-external/pull/6",
+      "state": "MERGED",
+      "author": "rohanmahy",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2025-12-15T16:42:31Z",
+      "updatedAt": "2025-12-15T16:42:58Z",
+      "baseRepository": "rohanmahy/mls-private-external",
+      "baseRefName": "main",
+      "baseRefOid": "155e7aa9e3b45b81d36069a8a313c06de23f3009",
+      "headRepository": "rohanmahy/mls-private-external",
+      "headRefName": "iana-components",
+      "headRefOid": "cc961f7c6c1d39d8ce4936c0018e3c809b86ea7b",
+      "closedAt": "2025-12-15T16:42:58Z",
+      "mergedAt": "2025-12-15T16:42:58Z",
+      "mergedBy": "rohanmahy",
+      "mergeCommit": {
+        "oid": "070fadf42c0fe1ee369ee15e82fe76d766db5237"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
