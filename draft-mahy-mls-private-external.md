@@ -71,7 +71,8 @@ It also provides a way to convey that public key safely to prevent active attack
 
 ## External Encryption Key Derivation
 
-Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the next epoch secret for encrypting external messages. When creating a commit, the committer first computes the epoch secret that will result from processing the commit, then derives the external encryption key from that epoch secret.
+Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the next epoch secret for encrypting external messages. 
+When creating a provisional commit, the committer first computes the epoch secret that will result from processing the provisional commit, then derives the external encryption key from that epoch secret.
 
 This ensures that removed members cannot decrypt external messages, as they do not have access to the next epoch secret.
 
