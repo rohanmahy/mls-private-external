@@ -244,7 +244,7 @@ This document requests the addition of a new entry to the "MLS Wire Formats" reg
 
 | Value  | Name                          | Recommended | Reference     |
 |:-------|:------------------------------|:------------|:--------------|
-| 0xTBD  | mls_private_external_message  | Y           | This document |
+| TBD1   | mls_private_external_message  | Y           | RFC XXXX      |
 
 ## MLS Signature Labels
 
