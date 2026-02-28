@@ -269,7 +269,7 @@ This document requests the addition of a new entry to the "MLS Extension Types" 
 
 | Value  | Name                    | Message(s) | Recommended | Reference     |
 |:-------|:------------------------|:-----------|:------------|:--------------|
-| 0xTBD  | external_encryption_info | GI         | Y           | This document |
+| TBD2   | external_encryption_info | GI         | Y           | RFC XXXX      |
 
 ## MLS Component Types
 
