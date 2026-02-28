@@ -261,7 +261,7 @@ This document requests the addition of a new entry to the "MLS Public Key Encryp
 
 | Label                             | Recommended | Reference     |
 |:----------------------------------|:------------|:--------------|
-| PrivateExternalMessageContent     | Y           | This document |
+| PrivateExternalMessageContent     | Y           | RFC XXXX      |
 
 ## MLS Extension Types
 
