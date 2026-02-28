@@ -253,7 +253,7 @@ This document requests the addition of a new entry to the "MLS Signature Labels"
 
 | Label                        | Recommended | Reference     |
 |:-----------------------------|:------------|:--------------|
-| ExternalEncryptionInfoTBS    | Y           | This document |
+| ExternalEncryptionInfoTBS    | Y           | RFC XXXX      |
 
 ## MLS Public Key Encryption Labels
 
