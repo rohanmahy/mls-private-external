@@ -238,6 +238,7 @@ TODO add more.
 
 # IANA Considerations
 
+IANA, please replace the value RFC XXXX with the name of this document.
 ## MLS Wire Formats
 
 This document requests the addition of a new entry to the "MLS Wire Formats" registry defined in {{Section 17.2 of !RFC9420}}:
