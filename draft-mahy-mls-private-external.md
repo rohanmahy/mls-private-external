@@ -275,7 +275,9 @@ This document requests the addition of a new entry to the "MLS Extension Types" 
 
 This document registers two new MLS Component Types in the Specification Required range:
 
-- Value: TBD (suggested value 0x000A)
+### root_private_signature_key MLS Component Type
+
+- Value: TBD3 (suggested value 0x000A)
 - Name: root_private_signature_key
 - Where: GC
 - Recommended: Y
