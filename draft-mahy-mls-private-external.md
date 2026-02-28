@@ -280,7 +280,9 @@ This document registers two new MLS Component Types in the Specification Require
 - Recommended: Y
 - Reference: RFC XXXX
 
-- Value: TBD (suggested value 0x000B)
+### external_encryption_public_key MLS Component Type 
+
+- Value: TBD4 (suggested value 0x000B)
 - Name: external_encryption_public_key
 - Where: AD
 - Recommended: Y
