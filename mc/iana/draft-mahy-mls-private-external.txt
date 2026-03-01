@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 31 August 2026                                         Ephemera
-                                                        27 February 2026
+Expires: 2 September 2026                                       Ephemera
+                                                            1 March 2026
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 2 September 2026.
 
 Copyright Notice
 
@@ -84,11 +84,12 @@ Table of Contents
      4.2.  Security of External Commits
      4.3.  Security of KeyPackages and Welcomes
    5.  IANA Considerations
-     5.1.  MLS Wire Formats
-     5.2.  MLS Signature Labels
-     5.3.  MLS Public Key Encryption Labels
-     5.4.  MLS Extension Types
-     5.5.  MLS Component Types
+     5.1.  MLS Signature Labels
+     5.2.  MLS Public Key Encryption Labels
+     5.3.  MLS Extension Types
+     5.4.  MLS Component Types
+       5.4.1.  root_private_signature_key MLS Component Type
+       5.4.2.  external_encryption_public_key MLS Component Type
    6.  References
      6.1.  Normative References
      6.2.  Informative References
@@ -356,7 +357,8 @@ Table of Contents
 
 5.  IANA Considerations
 
-5.1.  MLS Wire Formats
+   IANA, please replace the value RFC XXXX with the name of this
+   document. ## MLS Wire Formats
 
    This document requests the addition of a new entry to the "MLS Wire
    Formats" registry defined in Section 17.2 of [RFC9420]:
@@ -364,39 +366,38 @@ Table of Contents
     +=======+==============================+=============+===========+
     | Value | Name                         | Recommended | Reference |
     +=======+==============================+=============+===========+
-    | 0xTBD | mls_private_external_message | Y           | This      |
-    |       |                              |             | document  |
+    | TBD1  | mls_private_external_message | Y           | RFC XXXX  |
     +-------+------------------------------+-------------+-----------+
 
                                  Table 1
 
-5.2.  MLS Signature Labels
+5.1.  MLS Signature Labels
 
    This document requests the addition of a new entry to the "MLS
    Signature Labels" registry defined in Section 17.6 of [RFC9420]:
 
-        +===========================+=============+===============+
-        | Label                     | Recommended | Reference     |
-        +===========================+=============+===============+
-        | ExternalEncryptionInfoTBS | Y           | This document |
-        +---------------------------+-------------+---------------+
+          +===========================+=============+===========+
+          | Label                     | Recommended | Reference |
+          +===========================+=============+===========+
+          | ExternalEncryptionInfoTBS | Y           | RFC XXXX  |
+          +---------------------------+-------------+-----------+
 
                                   Table 2
 
-5.3.  MLS Public Key Encryption Labels
+5.2.  MLS Public Key Encryption Labels
 
    This document requests the addition of a new entry to the "MLS Public
    Key Encryption Labels" registry defined in Section 17.7 of [RFC9420]:
 
-      +===============================+=============+===============+
-      | Label                         | Recommended | Reference     |
-      +===============================+=============+===============+
-      | PrivateExternalMessageContent | Y           | This document |
-      +-------------------------------+-------------+---------------+
+        +===============================+=============+===========+
+        | Label                         | Recommended | Reference |
+        +===============================+=============+===========+
+        | PrivateExternalMessageContent | Y           | RFC XXXX  |
+        +-------------------------------+-------------+-----------+
 
                                   Table 3
 
-5.4.  MLS Extension Types
+5.3.  MLS Extension Types
 
    This document requests the addition of a new entry to the "MLS
    Extension Types" registry defined in Section 17.3 of [RFC9420].  This
@@ -406,18 +407,19 @@ Table of Contents
     +=====+==========================+==========+===========+=========+
     |Value| Name                     |Message(s)|Recommended|Reference|
     +=====+==========================+==========+===========+=========+
-    |0xTBD| external_encryption_info |GI        |Y          |This     |
-    |     |                          |          |           |document |
+    |TBD2 | external_encryption_info |GI        |Y          |RFC XXXX |
     +-----+--------------------------+----------+-----------+---------+
 
                                   Table 4
 
-5.5.  MLS Component Types
+5.4.  MLS Component Types
 
    This document registers two new MLS Component Types in the
    Specification Required range:
 
-   *  Value: TBD (suggested value 0x000A)
+5.4.1.  root_private_signature_key MLS Component Type
+
+   *  Value: TBD3 (suggested value 0x000A)
 
    *  Name: root_private_signature_key
 
@@ -427,7 +429,9 @@ Table of Contents
 
    *  Reference: RFC XXXX
 
-   *  Value: TBD (suggested value 0x000B)
+5.4.2.  external_encryption_public_key MLS Component Type
+
+   *  Value: TBD4 (suggested value 0x000B)
 
    *  Name: external_encryption_public_key
 
