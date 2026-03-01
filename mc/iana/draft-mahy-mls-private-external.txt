@@ -84,12 +84,13 @@ Table of Contents
      4.2.  Security of External Commits
      4.3.  Security of KeyPackages and Welcomes
    5.  IANA Considerations
-     5.1.  MLS Signature Labels
-     5.2.  MLS Public Key Encryption Labels
-     5.3.  MLS Extension Types
-     5.4.  MLS Component Types
-       5.4.1.  root_private_signature_key MLS Component Type
-       5.4.2.  external_encryption_public_key MLS Component Type
+     5.1.  MLS Wire Formats
+     5.2.  MLS Signature Labels
+     5.3.  MLS Public Key Encryption Labels
+     5.4.  MLS Extension Types
+     5.5.  MLS Component Types
+       5.5.1.  root_private_signature_key MLS Component Type
+       5.5.2.  external_encryption_public_key MLS Component Type
    6.  References
      6.1.  Normative References
      6.2.  Informative References
@@ -358,7 +359,9 @@ Table of Contents
 5.  IANA Considerations
 
    IANA, please replace the value RFC XXXX with the name of this
-   document. ## MLS Wire Formats
+   document.
+
+5.1.  MLS Wire Formats
 
    This document requests the addition of a new entry to the "MLS Wire
    Formats" registry defined in Section 17.2 of [RFC9420]:
@@ -371,7 +374,7 @@ Table of Contents
 
                                  Table 1
 
-5.1.  MLS Signature Labels
+5.2.  MLS Signature Labels
 
    This document requests the addition of a new entry to the "MLS
    Signature Labels" registry defined in Section 17.6 of [RFC9420]:
@@ -384,7 +387,7 @@ Table of Contents
 
                                   Table 2
 
-5.2.  MLS Public Key Encryption Labels
+5.3.  MLS Public Key Encryption Labels
 
    This document requests the addition of a new entry to the "MLS Public
    Key Encryption Labels" registry defined in Section 17.7 of [RFC9420]:
@@ -397,7 +400,7 @@ Table of Contents
 
                                   Table 3
 
-5.3.  MLS Extension Types
+5.4.  MLS Extension Types
 
    This document requests the addition of a new entry to the "MLS
    Extension Types" registry defined in Section 17.3 of [RFC9420].  This
@@ -412,12 +415,12 @@ Table of Contents
 
                                   Table 4
 
-5.4.  MLS Component Types
+5.5.  MLS Component Types
 
    This document registers two new MLS Component Types in the
    Specification Required range:
 
-5.4.1.  root_private_signature_key MLS Component Type
+5.5.1.  root_private_signature_key MLS Component Type
 
    *  Value: TBD3 (suggested value 0x000A)
 
@@ -429,7 +432,7 @@ Table of Contents
 
    *  Reference: RFC XXXX
 
-5.4.2.  external_encryption_public_key MLS Component Type
+5.5.2.  external_encryption_public_key MLS Component Type
 
    *  Value: TBD4 (suggested value 0x000B)
 
