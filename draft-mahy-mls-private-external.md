@@ -238,27 +238,58 @@ TODO add more.
 
 # IANA Considerations
 
-This document registers two new MLS Component Types in the Specification Required range.
+IANA, please replace the value RFC XXXX with the name of this document.
 
+## MLS Wire Formats
 
-## root_private_signature_key MLS Component Type
+This document requests the addition of a new entry to the "MLS Wire Formats" registry defined in {{Section 17.2 of !RFC9420}}:
 
-- Value: TBD (suggested value 0x000A)
+| Value  | Name                          | Recommended | Reference     |
+|:-------|:------------------------------|:------------|:--------------|
+| TBD1   | mls_private_external_message  | Y           | RFC XXXX      |
+
+## MLS Signature Labels
+
+This document requests the addition of a new entry to the "MLS Signature Labels" registry defined in {{Section 17.6 of !RFC9420}}:
+
+| Label                        | Recommended | Reference     |
+|:-----------------------------|:------------|:--------------|
+| ExternalEncryptionInfoTBS    | Y           | RFC XXXX      |
+
+## MLS Public Key Encryption Labels
+
+This document requests the addition of a new entry to the "MLS Public Key Encryption Labels" registry defined in {{Section 17.7 of !RFC9420}}:
+
+| Label                             | Recommended | Reference     |
+|:----------------------------------|:------------|:--------------|
+| PrivateExternalMessageContent     | Y           | RFC XXXX      |
+
+## MLS Extension Types
+
+This document requests the addition of a new entry to the "MLS Extension Types" registry defined in {{Section 17.3 of !RFC9420}}. This extension type is used to identify the `ExternalEncryptionInfo` AAD component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}):
+
+| Value  | Name                    | Message(s) | Recommended | Reference     |
+|:-------|:------------------------|:-----------|:------------|:--------------|
+| TBD2   | external_encryption_info | GI         | Y           | RFC XXXX      |
+
+## MLS Component Types
+
+This document registers two new MLS Component Types in the Specification Required range:
+
+### root_private_signature_key MLS Component Type
+
+- Value: TBD3 (suggested value 0x000A)
 - Name: root_private_signature_key
 - Where: GC
 - Recommended: Y
 - Reference: RFC XXXX
 
-## external_encryption_public_key MLS Component Type
+### external_encryption_public_key MLS Component Type
 
-- Value: TBD (suggested value 0x000B)
+- Value: TBD4 (suggested value 0x000B)
 - Name: external_encryption_public_key
 - Where: AD
 - Recommended: Y
 - Reference: RFC XXXX
-
-## PrivateExternalMessage MLS WireFormat
-
-TODO
 
 --- back
