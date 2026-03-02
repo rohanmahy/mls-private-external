@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 31 August 2026                                        XMTP Labs
-                                                        27 February 2026
+Expires: 3 September 2026                                      XMTP Labs
+                                                            2 March 2026
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
@@ -139,18 +139,18 @@ Table of Contents
 
    Groups using this extension derive a dedicated HPKE [RFC9180] key
    pair from the next epoch secret for encrypting external messages.
-   When creating a commit, the committer first computes the epoch secret
-   that will result from processing the commit, then derives the
-   external encryption key from that epoch secret.
+   When creating a provisional commit, the committer first computes the
+   epoch secret that will result from processing the provisional commit,
+   then derives the external encryption key from that epoch secret.
 
    This ensures that removed members cannot decrypt external messages,
    as they do not have access to the next epoch secret.
 
 3.1.1.  Computing the Next Epoch Secret
 
-   When a member creates a commit, they compute the next epoch secret
-   before sending the commit, following the key schedule defined in
-   [RFC9420], Section 8.
+   When a member creates a provisional commit, they compute the next
+   epoch secret before sending the commit, following the key schedule
+   defined in [RFC9420], Section 8.
 
    The next epoch secret is derived through the standard MLS key
    schedule: the commit_secret (from the commit's UpdatePath) and the
@@ -173,12 +173,12 @@ external_encryption_secret =
 
    *  epoch_secret_next is the epoch secret computed for the next epoch
 
-   *  ExpandWithLabel is defined in [RFC9420], Section 8
+   *  ExpandWithLabel is defined in Section 8 of [RFC9420]
 
-   *  KEM.DeriveKeyPair is defined in [RFC9180], Section 4
+   *  KEM.DeriveKeyPair is defined in Section 4 of [RFC9180]
 
    *  KDF.Nh is the size of an output from KDF.Extract for the cipher
-      suite, as defined in [RFC9420], Section 8
+      suite, as defined in Section 8 of [RFC9420]
 
    The epoch field in ExternalEncryptionInfo MUST be set to
    current_epoch + 1.
@@ -190,7 +190,7 @@ external_encryption_secret =
 
 3.2.  Additional information shared in every commit
 
-   Groups participating in this mechanism MUST include a
+   Groups participating in this mechanism include a
    root_private_signature_key component (see Section 4.6 of
    [I-D.ietf-mls-extensions]) in the GroupContext of type
    RootPrivateSignature, containing a unique random private signature
@@ -201,11 +201,11 @@ external_encryption_secret =
    Members sending a commit need to calculate the future epoch_secret,
    external_encryption_secret, and external_encryption_public_key for
    the new epoch that would result if the commit is accepted.  The
-   commit sender MUST include one additional Additional Authentication
-   Data (AAD) component (see Section 4.9 of [I-D.ietf-mls-extensions])
-   of type ExternalEncryptionInfo in every commit (including commits
-   sent in a PrivateExternalMessage).  The ExternalEncryptionInfo
-   includes the external_encryption_public_key for the future epoch.
+   commit sender includes one additional Additional Authentication Data
+   (AAD) component (see Section 4.9 of [I-D.ietf-mls-extensions]) of
+   type ExternalEncryptionInfo in every commit (including commits sent
+   in a PrivateExternalMessage).  The ExternalEncryptionInfo includes
+   the external_encryption_public_key for the future epoch.
 
       Note: SafeSignWithLabel is not used, because there are two
       different component IDs represented.
@@ -235,9 +235,10 @@ external_encryption_secret =
    The epoch field in ExternalEncryptionInfoTBS indicates the epoch for
    which the external encryption key is valid.  Since the key is derived
    from the next epoch secret, this field MUST be set to current_epoch +
-   1, where current_epoch is the epoch number at the time the commit is
-   created.  Once the commit is processed and the group advances to the
-   new epoch, the epoch field will match the group's current epoch.
+   1, where current_epoch is the epoch number at the time the
+   provisional commit is created.  Once the commit is processed and the
+   group advances to the new epoch, the epoch field will match the
+   group's current epoch.
 
 3.3.  Sending an external proposal or external commit to the group
 
@@ -323,7 +324,7 @@ PrivateExternalMessage.authenticated_data =
 
    If decryption fails, the message MUST be rejected.
 
-   Members MUST then verify that the following values in the
+   Members then verify that the following values in the
    PrivateExternalMessage match their corresponding field in the
    external_message_plaintext.content:
 
