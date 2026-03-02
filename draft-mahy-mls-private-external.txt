@@ -459,27 +459,26 @@ PrivateExternalMessage.authenticated_data =
 4.4.  Security of KeyPackages
 
    In the classical usage of MLS, a member of a group fetches a
-   KeyPackage, commits an Add proposal containing that KeyPackage, the
-   sends a Welcome to the new member.  Both the returned KeyPackage and
-   the query for it could reveal a lot of private information.  In order
-   to forward a Welcome message to the correct recipient, the DS needs
-   to be able to associate the KeyPackageRef with some resource that
-   eventually delivers to the appropriate client.
+   KeyPackage, commits an Add proposal containing that KeyPackage, then
+   sends a Welcome to the new member.  In order to forward a Welcome
+   message to the correct recipient, the DS needs to be able to
+   associate the KeyPackageRef with some resource that eventually
+   delivers to the appropriate client.
 
    As long as KeyPackages are exchanged securely out-of-band, this
    extension extends the privacy of the MLS GroupContext and ratchet
    tree to external joiners.
 
-   However, the process of fetching a KeyPackage may itself leak
-   information.  The DS must associate a KeyPackageRef with a user
-   identity in order to deliver Welcome messages correctly.  If the
-   KeyPackage fetch is not done privately (e.g., via Oblivious HTTP
-   [RFC9458]), the DS can observe which KeyPackages are being fetched
-   and by whom, potentially revealing the joiner's intent before any
-   encrypted message is sent.
+   When the DS knows the relationship between a fetched KeyPackage and
+   the requesting user or target group, the DS can then link an added
+   member (via its KeyPackageRef) to the requesting user or target
+   group.  An appropriate privacy-preserving mechanism (e.g., via
+   Oblivious HTTP [RFC9458]) can associate a KeyPackageRef with the
+   target member, without a correlation to the requesting user or target
+   group.
 
-   Applications SHOULD consider using privacy-preserving mechanisms for
-   KeyPackage retrieval when deploying this extension.
+   Applications SHOULD consider using such privacy-preserving mechanisms
+   for KeyPackage retrieval when deploying this extension.
 
 4.5.  Security of Welcomes
 
