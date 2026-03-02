@@ -1055,11 +1055,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">MLS Private External Messages</td>
-<td class="right">February 2026</td>
+<td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Mahy &amp; Chenani</td>
-<td class="center">Expires 31 August 2026</td>
+<td class="center">Expires 3 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1072,12 +1072,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-mahy-mls-private-external-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-27" class="published">27 February 2026</time>
+<time datetime="2026-03-02" class="published">2 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Informational</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-31">31 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-03">3 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1130,7 +1130,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 3 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1489,7 +1489,7 @@ The privacy of some of these techniques could also be reinforced by using Oblivi
             <p id="section-4.3-4.3.1">The Welcome message sent back to the joiner is a separate message that the DS can observe and correlate with the external commit.<a href="#section-4.3-4.3.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
-<p id="section-4.3-5">The <code>ExternalEncryptionInfo</code> signature prevents a malicious DS from substituting its own HPKE public key to perform a man-in-the-middle attack. Without this signature, the DS could decrypt the external commit, inspect the joiner's credentials, then re-encrypt with the legitimate key and forward it, completely defeating the privacy goal.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
+<p id="section-4.3-5">The <code>ExternalEncryptionInfo</code> signature prevents a malicious DS from substituting its own HPKE public key to perform an active attack. Without this signature, the DS could decrypt the external commit, inspect the joiner's credentials, then re-encrypt with the legitimate key and forward it, completely defeating the privacy goal.<a href="#section-4.3-5" class="pilcrow">¶</a></p>
 <p id="section-4.3-6">Note that the <code>external_pub</code> key (used for the ExternalInit proposal within the commit) and the <code>external_encryption_public_key</code> (used for the PrivateExternalMessage encryption) serve different purposes. The former is part of the MLS key schedule for deriving the <code>init_secret</code>; the latter protects the confidentiality of the external commit message itself. Both are derived from the epoch secret but from different labeled expansions.<a href="#section-4.3-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1501,7 +1501,7 @@ The privacy of some of these techniques could also be reinforced by using Oblivi
 <p id="section-4.4-1">In the classical usage of MLS, a member of a group fetches a KeyPackage, commits an Add proposal containing that KeyPackage, the sends a Welcome to the new member.
 Both the returned KeyPackage and the query for it could reveal a lot of private information.
 In order to forward a Welcome message to the correct recipient, the DS needs to be able to associate the <code>KeyPackageRef</code> with some resource that eventually delivers to the appropriate client.<a href="#section-4.4-1" class="pilcrow">¶</a></p>
-<p id="section-4.4-2">As long as KeyPackages are exchanged securely out of band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
+<p id="section-4.4-2">As long as KeyPackages are exchanged securely out-of-band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.<a href="#section-4.4-2" class="pilcrow">¶</a></p>
 <p id="section-4.4-3">However, the process of fetching a KeyPackage may itself leak information. The DS must associate a <code>KeyPackageRef</code> with a user identity in order to deliver Welcome messages correctly. If the KeyPackage fetch is not done privately (e.g., via Oblivious HTTP <span>[<a href="#RFC9458" class="cite xref">RFC9458</a>]</span>), the DS can observe which KeyPackages are being fetched and by whom, potentially revealing the joiner's intent before any encrypted message is sent.<a href="#section-4.4-3" class="pilcrow">¶</a></p>
 <p id="section-4.4-4">Applications <span class="bcp14">SHOULD</span> consider using privacy-preserving mechanisms for KeyPackage retrieval when deploying this extension.<a href="#section-4.4-4" class="pilcrow">¶</a></p>
 </section>

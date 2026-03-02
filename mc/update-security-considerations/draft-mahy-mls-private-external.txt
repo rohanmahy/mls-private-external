@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 31 August 2026                                         Ephemera
-                                                        27 February 2026
+Expires: 3 September 2026                                       Ephemera
+                                                            2 March 2026
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 31 August 2026.
+   This Internet-Draft will expire on 3 September 2026.
 
 Copyright Notice
 
@@ -383,10 +383,10 @@ Table of Contents
       that the DS can observe and correlate with the external commit.
 
    The ExternalEncryptionInfo signature prevents a malicious DS from
-   substituting its own HPKE public key to perform a man-in-the-middle
-   attack.  Without this signature, the DS could decrypt the external
-   commit, inspect the joiner's credentials, then re-encrypt with the
-   legitimate key and forward it, completely defeating the privacy goal.
+   substituting its own HPKE public key to perform an active attack.
+   Without this signature, the DS could decrypt the external commit,
+   inspect the joiner's credentials, then re-encrypt with the legitimate
+   key and forward it, completely defeating the privacy goal.
 
    Note that the external_pub key (used for the ExternalInit proposal
    within the commit) and the external_encryption_public_key (used for
@@ -406,7 +406,7 @@ Table of Contents
    to be able to associate the KeyPackageRef with some resource that
    eventually delivers to the appropriate client.
 
-   As long as KeyPackages are exchanged securely out of band, this
+   As long as KeyPackages are exchanged securely out-of-band, this
    extension extends the privacy of the MLS GroupContext and ratchet
    tree to external joiners.
 
