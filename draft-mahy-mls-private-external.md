@@ -246,24 +246,57 @@ External Add proposals in {{!RFC9420}} are sent using an MLS PublicMessage, whic
 If a public key representing the entire target MLS group is available, the external proposer can encrypt this information to all group members without revealing it to the DS.
 The external proposer needs a way to get this public key and not the key of an active attacker, and the DS and members need a reasonable authorization and rate limiting mechanisms to prevent from being overwhelmed by such encrypted requests.
 
-The `ExternalEncryptionInfo` defined in {{ext-info}} contains a per-group, per-epoch signature key shared by all members of the group
+The `ExternalEncryptionInfo` defined in {{ext-info}} contains a per-group, per-epoch signature key shared by all members of the group.
 The `ExternalEncryptionInfo` could be posted in transparency ledger, shared as gossip, or additionally signed by a specific member.
 The specific mechanism can be tailored to a specific application as needed.
 
 Application protocols above the MLS layer would also need to provide authorization. For example, in the MIMI protocol {{?I-D.ietf-mimi-protocol}} this could be a join code. Other techniques such as using single or limited use pseudonymous tokens, privacy pass {{?RFC9576}}, or anonymous credit tokens {{?I-D.schlesinger-cfrg-act}} are all reasonable options.
 The privacy of some of these techniques could also be reinforced by using Oblivious HTTP {{?RFC9458}}.
 
+## Use of Next Epoch Secret
+
+This specification derives the external encryption key from the next epoch secret (the epoch that results from processing the commit) rather than the current epoch secret. This design choice is critical for maintaining post-compromise security.
+
+If the external encryption key were derived from the current epoch secret, removed members would be able to decrypt external messages sent after their removal, because they possess the current epoch secret. By deriving the key from the next epoch secret, removed members do not have access to the keying material and cannot decrypt external messages.
+
+This approach follows the same pattern as Welcome messages in {{!RFC9420}}, which are encrypted using keys from the new epoch rather than the current epoch.
+
 ## Security of External Commits
 
-TODO
+External commits in {{!RFC9420}} are sent as PublicMessage and reveal the joiner's credential, public signature key, capabilities, and UpdatePath (including HPKE public keys for every node on the joiner's direct path). This allows the DS to learn the identity of the joiner and correlate it with other group memberships.
 
-## Security of KeyPackages and Welcomes
+When wrapped in a `PrivateExternalMessage`, the DS can only observe the `group_id`, `epoch`, `content_type`, and `authenticated_data` fields in the outer wrapper. The joiner's credential, signature key, capabilities, and UpdatePath are encrypted and visible only to group members.
+
+However, some metadata leakage remains:
+
+- The DS can observe that an external commit occurred (from the `content_type` field and the subsequent epoch change).
+- The DS can observe the size of the encrypted message, which may reveal information about the joiner's credential size or the depth of the ratchet tree.
+- The Welcome message sent back to the joiner is a separate message that the DS can observe and correlate with the external commit.
+
+The `ExternalEncryptionInfo` signature prevents a malicious DS from substituting its own HPKE public key to perform an active attack. Without this signature, the DS could decrypt the external commit, inspect the joiner's credentials, then re-encrypt with the legitimate key and forward it, completely defeating the privacy goal.
+
+Note that the `external_pub` key (used for the ExternalInit proposal within the commit) and the `external_encryption_public_key` (used for the PrivateExternalMessage encryption) serve different purposes. The former is part of the MLS key schedule for deriving the `init_secret`; the latter protects the confidentiality of the external commit message itself. Both are derived from the epoch secret but from different labeled expansions.
+
+## Security of KeyPackages
 
 In the classical usage of MLS, a member of a group fetches a KeyPackage, commits an Add proposal containing that KeyPackage, the sends a Welcome to the new member.
 Both the returned KeyPackage and the query for it could reveal a lot of private information.
 In order to forward a Welcome message to the correct recipient, the DS needs to be able to associate the `KeyPackageRef` with some resource that eventually delivers to the appropriate client.
 
-TODO add more.
+As long as KeyPackages are exchanged securely out-of-band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.
+
+However, the process of fetching a KeyPackage may itself leak information. The DS must associate a `KeyPackageRef` with a user identity in order to deliver Welcome messages correctly. If the KeyPackage fetch is not done privately (e.g., via Oblivious HTTP {{?RFC9458}}), the DS can observe which KeyPackages are being fetched and by whom, potentially revealing the joiner's intent before any encrypted message is sent.
+
+Applications SHOULD consider using privacy-preserving mechanisms for KeyPackage retrieval when deploying this extension.
+
+## Security of Welcomes
+
+Welcome messages in {{!RFC9420}} are encrypted to the new member's KeyPackage and contain the `GroupInfo` and `path_secret` values needed to initialize the new member's state. The Welcome message itself does not reveal group contents to the DS. However, the DS can observe:
+
+- That a Welcome message was sent (confirming a successful join).
+- The `KeyPackageRef` in the Welcome, which allows the DS to correlate the Welcome with a previously fetched KeyPackage and identify the new member.
+
+This extension does not modify the Welcome message format. Applications concerned about Welcome correlation SHOULD consider additional measures such as using pseudonymous KeyPackage distribution or Oblivious HTTP {{?RFC9458}} for Welcome delivery.
 
 # IANA Considerations
 
