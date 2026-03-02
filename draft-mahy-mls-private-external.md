@@ -71,7 +71,7 @@ It also provides a way to convey that public key safely to prevent active attack
 
 ## External Encryption Key Derivation
 
-Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the next epoch secret for encrypting external messages. 
+Groups using this extension derive a dedicated HPKE {{!RFC9180}} key pair from the next epoch secret for encrypting external messages.
 When creating a provisional commit, the committer first computes the epoch secret that will result from processing the provisional commit, then derives the external encryption key from that epoch secret.
 
 This ensures that removed members cannot decrypt external messages, as they do not have access to the next epoch secret.
@@ -107,11 +107,11 @@ The public key is made available to external senders via the `ExternalEncryption
 
 ## Additional information shared in every commit {#ext-info}
 
-Groups participating in this mechanism MUST include a `root_private_signature_key` component (see {{Section 4.6 of !I-D.ietf-mls-extensions}}) in the GroupContext of type `RootPrivateSignature`, containing a unique random private signature key corresponding to the group's cipher suite.
+Groups participating in this mechanism include a `root_private_signature_key` component (see {{Section 4.6 of !I-D.ietf-mls-extensions}}) in the GroupContext of type `RootPrivateSignature`, containing a unique random private signature key corresponding to the group's cipher suite.
 Whenever a commit removes a member from a group, this component MUST be replaced with a new unique random private signature key.
 
 Members sending a commit need to calculate the future `epoch_secret`, `external_encryption_secret`, and `external_encryption_public_key` for the new epoch that would result if the commit is accepted.
-The commit sender MUST include one additional Additional Authentication Data (AAD) component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}) of type `ExternalEncryptionInfo` in every commit (including commits sent in a `PrivateExternalMessage`).
+The commit sender includes one additional Additional Authentication Data (AAD) component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}) of type `ExternalEncryptionInfo` in every commit (including commits sent in a `PrivateExternalMessage`).
 The `ExternalEncryptionInfo` includes the `external_encryption_public_key` for the future epoch.
 
 > Note: SafeSignWithLabel is not used, because there are two different component IDs represented.
@@ -217,7 +217,7 @@ external_message_plaintext = DecryptWithLabel(
 
 If decryption fails, the message MUST be rejected.
 
-Members MUST then verify that the following values in the `PrivateExternalMessage` match their corresponding field in the `external_message_plaintext.content`:
+Members then verify that the following values in the `PrivateExternalMessage` match their corresponding field in the `external_message_plaintext.content`:
 
 - `group_id`,
 - `epoch`,
