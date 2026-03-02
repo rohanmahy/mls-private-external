@@ -78,7 +78,7 @@ This ensures that removed members cannot decrypt external messages, as they do n
 
 ### Computing the Next Epoch Secret
 
-When a member creates a commit, they compute the next epoch secret before sending the commit, following the key schedule defined in {{!RFC9420, Section 8}}.
+When a member creates a provisional commit, they compute the next epoch secret before sending the commit, following the key schedule defined in {{!RFC9420, Section 8}}.
 
 The next epoch secret is derived through the standard MLS key schedule: the `commit_secret` (from the commit's UpdatePath) and the current epoch's `init_secret` produce the `joiner_secret`, which is combined with any PSK secrets to produce the `epoch_secret` for the new epoch. This document refers to this value as `epoch_secret_next`.
 
@@ -97,9 +97,9 @@ external_encryption_secret =
 Where:
 
 - `epoch_secret_next` is the epoch secret computed for the next epoch
-- `ExpandWithLabel` is defined in {{!RFC9420, Section 8}}
-- `KEM.DeriveKeyPair` is defined in {{!RFC9180, Section 4}}
-- `KDF.Nh` is the size of an output from `KDF.Extract` for the cipher suite, as defined in {{!RFC9420, Section 8}}
+- `ExpandWithLabel` is defined in {{Section 8 of !RFC9420}}
+- `KEM.DeriveKeyPair` is defined in {{Section 4 of !RFC9180}}
+- `KDF.Nh` is the size of an output from `KDF.Extract` for the cipher suite, as defined in {{Section 8 of !RFC9420}}
 
 The `epoch` field in `ExternalEncryptionInfo` MUST be set to `current_epoch + 1`.
 
@@ -140,7 +140,9 @@ struct {
 } ExternalEncryptionInfo;
 ~~~
 
-The `epoch` field in `ExternalEncryptionInfoTBS` indicates the epoch for which the external encryption key is valid. Since the key is derived from the next epoch secret, this field MUST be set to `current_epoch + 1`, where `current_epoch` is the epoch number at the time the commit is created. Once the commit is processed and the group advances to the new epoch, the `epoch` field will match the group's current epoch.
+The `epoch` field in `ExternalEncryptionInfoTBS` indicates the epoch for which the external encryption key is valid.
+Since the key is derived from the next epoch secret, this field MUST be set to `current_epoch + 1`, where `current_epoch` is the epoch number at the time the provisional commit is created.
+Once the commit is processed and the group advances to the new epoch, the `epoch` field will match the group's current epoch.
 
 ## Sending an external proposal or external commit to the group
 
