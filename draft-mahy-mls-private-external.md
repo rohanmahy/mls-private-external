@@ -244,7 +244,7 @@ However, some metadata leakage remains:
 - The DS can observe the size of the encrypted message, which may reveal information about the joiner's credential size or the depth of the ratchet tree.
 - The Welcome message sent back to the joiner is a separate message that the DS can observe and correlate with the external commit.
 
-The `ExternalEncryptionInfo` signature prevents a malicious DS from substituting its own HPKE public key to perform a man-in-the-middle attack. Without this signature, the DS could decrypt the external commit, inspect the joiner's credentials, then re-encrypt with the legitimate key and forward it, completely defeating the privacy goal.
+The `ExternalEncryptionInfo` signature prevents a malicious DS from substituting its own HPKE public key to perform an active attack. Without this signature, the DS could decrypt the external commit, inspect the joiner's credentials, then re-encrypt with the legitimate key and forward it, completely defeating the privacy goal.
 
 Note that the `external_pub` key (used for the ExternalInit proposal within the commit) and the `external_encryption_public_key` (used for the PrivateExternalMessage encryption) serve different purposes. The former is part of the MLS key schedule for deriving the `init_secret`; the latter protects the confidentiality of the external commit message itself. Both are derived from the epoch secret but from different labeled expansions.
 
@@ -254,7 +254,7 @@ In the classical usage of MLS, a member of a group fetches a KeyPackage, commits
 Both the returned KeyPackage and the query for it could reveal a lot of private information.
 In order to forward a Welcome message to the correct recipient, the DS needs to be able to associate the `KeyPackageRef` with some resource that eventually delivers to the appropriate client.
 
-As long as KeyPackages are exchanged securely out of band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.
+As long as KeyPackages are exchanged securely out-of-band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.
 
 However, the process of fetching a KeyPackage may itself leak information. The DS must associate a `KeyPackageRef` with a user identity in order to deliver Welcome messages correctly. If the KeyPackage fetch is not done privately (e.g., via Oblivious HTTP {{?RFC9458}}), the DS can observe which KeyPackages are being fetched and by whom, potentially revealing the joiner's intent before any encrypted message is sent.
 
