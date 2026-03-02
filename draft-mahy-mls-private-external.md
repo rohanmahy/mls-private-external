@@ -284,7 +284,8 @@ In order to forward a Welcome message to the correct recipient, the DS needs to 
 
 As long as KeyPackages are exchanged securely out-of-band, this extension extends the privacy of the MLS GroupContext and ratchet tree to external joiners.
 
-When the DS knows the relationship between a fetched KeyPackage and the requesting user or target group, the DS can then link an added member (via its `KeyPackageRef`) to the requesting user or target group. An appropriate privacy-preserving mechanism for associating a `KeyPackageRef` with the intended member without a linkage to the requesting user or target group (e.g., via Oblivious HTTP {{?RFC9458}}) prevents this correlation.
+When the DS knows the relationship between a fetched KeyPackage and the requesting user or target group, the DS can then link an added member (via its `KeyPackageRef`) to the requesting user or target group.
+An appropriate privacy-preserving mechanism (e.g., via Oblivious HTTP {{?RFC9458}}) can associate a `KeyPackageRef` with the target member, without a correlation to the requesting user or target group.
 
 Applications SHOULD consider using such privacy-preserving mechanisms for KeyPackage retrieval when deploying this extension.
 
