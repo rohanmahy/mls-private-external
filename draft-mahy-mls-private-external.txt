@@ -5,8 +5,8 @@
 Messaging Layer Security                                         R. Mahy
 Internet-Draft                                                          
 Intended status: Informational                                M. Chenani
-Expires: 3 September 2026                                      XMTP Labs
-                                                            2 March 2026
+Expires: 5 May 2027                                            XMTP Labs
+                                                         1 November 2026
 
 
  Private External Message extensions for Messaging Layer Security (MLS)
@@ -53,7 +53,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 3 September 2026.
+   This Internet-Draft will expire on 5 May 2027.
 
 Copyright Notice
 
@@ -508,13 +508,13 @@ PrivateExternalMessage.authenticated_data =
    This document requests the addition of a new entry to the "MLS Wire
    Formats" registry defined in Section 17.2 of [RFC9420]:
 
-    +=======+==============================+=============+===========+
-    | Value | Name                         | Recommended | Reference |
-    +=======+==============================+=============+===========+
-    | TBD1  | mls_private_external_message | Y           | RFC XXXX  |
-    +-------+------------------------------+-------------+-----------+
+    +========+==============================+=============+===========+
+    | Value  | Name                         | Recommended | Reference |
+    +========+==============================+=============+===========+
+    | 0x0012 | mls_private_external_message | Y           | RFC XXXX  |
+    +--------+------------------------------+-------------+-----------+
 
-                                 Table 1
+                                  Table 1
 
 5.2.  MLS Signature Labels
 
@@ -549,13 +549,13 @@ PrivateExternalMessage.authenticated_data =
    extension type is used to identify the ExternalEncryptionInfo AAD
    component (see Section 4.9 of [I-D.ietf-mls-extensions]):
 
-    +=====+==========================+==========+===========+=========+
-    |Value| Name                     |Message(s)|Recommended|Reference|
-    +=====+==========================+==========+===========+=========+
-    |TBD2 | external_encryption_info |GI        |Y          |RFC XXXX |
-    +-----+--------------------------+----------+-----------+---------+
+   +======+==========================+==========+===========+=========+
+   |Value | Name                     |Message(s)|Recommended|Reference|
+   +======+==========================+==========+===========+=========+
+   |0x0011| external_encryption_info |GI        |Y          |RFC XXXX |
+   +------+--------------------------+----------+-----------+---------+
 
-                                  Table 4
+                                 Table 4
 
 5.5.  MLS Component Types
 
@@ -593,9 +593,9 @@ PrivateExternalMessage.authenticated_data =
    [I-D.ietf-mls-extensions]
               Robert, R., "The Messaging Layer Security (MLS)
               Extensions", Work in Progress, Internet-Draft, draft-ietf-
-              mls-extensions-08, 21 July 2025,
+              mls-extensions-10, 6 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-mls-
-              extensions-08>.
+              extensions-10>.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
@@ -621,16 +621,16 @@ PrivateExternalMessage.authenticated_data =
               Barnes, R., Hodgson, M., Kohbrok, K., Mahy, R., Ralston,
               T., and R. Robert, "More Instant Messaging
               Interoperability (MIMI) using HTTPS and MLS", Work in
-              Progress, Internet-Draft, draft-ietf-mimi-protocol-05, 20
-              October 2025, <https://datatracker.ietf.org/doc/html/
-              draft-ietf-mimi-protocol-05>.
+              Progress, Internet-Draft, draft-ietf-mimi-protocol-06, 25
+              April 2026, <https://datatracker.ietf.org/doc/html/draft-
+              ietf-mimi-protocol-06>.
 
    [I-D.mahy-mls-semiprivatemessage]
               Mahy, R., "Semi-Private Messages in the Messaging Layer
               Security (MLS) Protocol", Work in Progress, Internet-
-              Draft, draft-mahy-mls-semiprivatemessage-06, 16 October
-              2025, <https://datatracker.ietf.org/doc/html/draft-mahy-
-              mls-semiprivatemessage-06>.
+              Draft, draft-mahy-mls-semiprivatemessage-08, 1 November
+              2026, <https://datatracker.ietf.org/doc/html/draft-mahy-
+              mls-semiprivatemessage-08>.
 
    [I-D.schlesinger-cfrg-act]
               Schlesinger, S. and J. Katz, "Anonymous Credit Tokens",
