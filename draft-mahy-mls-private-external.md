@@ -308,7 +308,7 @@ This document requests the addition of a new entry to the "MLS Wire Formats" reg
 
 | Value  | Name                          | Recommended | Reference     |
 |:-------|:------------------------------|:------------|:--------------|
-| TBD1   | mls_private_external_message  | Y           | RFC XXXX      |
+| 0x0012 | mls_private_external_message  | Y           | RFC XXXX      |
 
 ## MLS Signature Labels
 
@@ -330,9 +330,9 @@ This document requests the addition of a new entry to the "MLS Public Key Encryp
 
 This document requests the addition of a new entry to the "MLS Extension Types" registry defined in {{Section 17.3 of !RFC9420}}. This extension type is used to identify the `ExternalEncryptionInfo` AAD component (see {{Section 4.9 of !I-D.ietf-mls-extensions}}):
 
-| Value  | Name                    | Message(s) | Recommended | Reference     |
-|:-------|:------------------------|:-----------|:------------|:--------------|
-| TBD2   | external_encryption_info | GI         | Y           | RFC XXXX      |
+| Value  | Name                     | Message(s) | Recommended | Reference     |
+|:-------|:-------------------------|:-----------|:------------|:--------------|
+| 0x0011 | external_encryption_info | GI         | Y           | RFC XXXX      |
 
 ## MLS Component Types
 
